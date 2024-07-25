@@ -1,0 +1,16 @@
+namespace: sock-shop
+component: catalogue
+autonomous_level: 2
+task: Rollback the image version of your microservice component to version 0.3.4.
+workload: moderate
+environment:
+  delete: []
+  create: []
+  modify: 
+    - filename: 05-catalogue-dep.yaml
+      create: []
+      delete: []
+      modify:
+        - jsonpath: $.spec.template.spec.containers[0].image
+          value: weaveworksdemos/catalogue:0.3.6
+  unhealthy_pods: 1
