@@ -1,0 +1,49 @@
+---
+apiVersion: locust.io/v1 
+kind: LocustTest
+metadata:
+  name: locust.test
+spec:
+  image: locustio/locust:latest 
+  masterCommandSeed: 
+    --locustfile /lotest/src/traffic.py
+    --host http://{{component}}.{{namespace}}.svc.cluster.local
+    --users {{users}}
+    --spawn-rate {{spawn_rate}}
+    --headless
+    --autostart
+  workerCommandSeed: --locustfile /lotest/src/traffic.py 
+  workerReplicas: 1
+  configMap: load-test-configmap
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: load-test-configmap
+data:
+  traffic.py: |-
+    import base64
+    from locust import HttpUser, task, constant
+    from random import choice
+
+    class User(HttpUser):
+
+        wait_time = constant(1)
+
+        @task 
+        def load(self) -> None:
+            base64string = base64.b64encode(b'user:password').decode('utf-8').replace('\n', '')
+
+            catalogue = self.client.get("/catalogue").json()
+            category_item = choice(catalogue)
+            item_id = category_item["id"]
+
+            self.client.get("/")
+            # self.client.get("/login", headers={"Authorization":"Basic %s" % base64string})
+            self.client.get("/category.html")
+            self.client.get("/detail.html?id={}".format(item_id))
+            # self.client.delete("/cart")
+            # self.client.post("/cart", json={"id": item_id, "quantity": 1})
+            # self.client.get("/basket.html")
+            # self.client.post("/orders")

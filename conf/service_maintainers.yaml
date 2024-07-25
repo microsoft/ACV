@@ -1,0 +1,146 @@
+common: 
+  prometheus_url: <prometheus_url>
+  tool_functions_path: src/agent/tool_functions_for_maintainer.py
+
+
+sock-shop:
+  front-end:
+    service_name: front-end
+    service_description: Front-end service. This service is the front-end of the application. Using for user interaction with application to view products, add to cart, checkout etc.
+    namespace: sock-shop
+    deploy_YAML_fp: 09-front-end-dep.yaml
+    service_YAML_fp: 10-front-end-svc.yaml
+    downstream_services: 
+      - orders
+      - payment
+      - user
+      - catalogue
+      - carts
+      - shipping
+    upstream_services: []
+
+  catalogue:
+    service_name: catalogue
+    service_description: Catalogue service. This service maintain all of products and their details, using by front-end service to display products.
+    namespace: sock-shop
+    deploy_YAML_fp: 05-catalogue-dep.yaml
+    service_YAML_fp: 06-catalogue-svc.yaml
+    downstream_services: 
+      - catalogue-db
+    upstream_services: 
+      - front-end
+    
+  catalogue-db:
+    service_name: catalogue-db
+    service_description: Catalogue database service. This service is the database of catalogue service, store all of products and their details.
+    namespace: sock-shop
+    deploy_YAML_fp: 07-catalogue-db-dep.yaml
+    service_YAML_fp: 08-catalogue-db-svc.yaml
+    downstream_services: []
+    upstream_services: 
+      - catalogue
+
+  user:
+    service_name: user
+    service_description: User service. This service maintain all of users and their details, using by front-end service to manage users.
+    namespace: sock-shop
+    deploy_YAML_fp: 25-user-dep.yaml
+    service_YAML_fp: 26-user-svc.yaml
+    downstream_services:
+      - user-db
+    upstream_services: 
+      - front-end
+
+  user-db:
+    service_name: user-db
+    service_description: User database service. This service is the database of user service, store all of users and their details.
+    namespace: sock-shop
+    deploy_YAML_fp: 27-user-db-dep.yaml
+    service_YAML_fp: 28-user-db-svc.yaml
+    downstream_services: []
+    upstream_services: 
+      - user
+
+  orders:
+    service_name: orders
+    service_description: Orders service. This service maintain all of orders and their details, using by front-end service to manage orders.
+    namespace: sock-shop
+    deploy_YAML_fp: 11-orders-dep.yaml
+    service_YAML_fp: 12-orders-svc.yaml
+    downstream_services: 
+      - orders-db
+    upstream_services: 
+      - front-end
+
+  orders-db:
+    service_name: orders-db
+    service_description: Orders database service. This service is the database of orders service, store all of orders and their details.
+    namespace: sock-shop
+    deploy_YAML_fp: 13-orders-db-dep.yaml
+    service_YAML_fp: 14-orders-db-svc.yaml
+    downstream_services: []
+    upstream_services: 
+      - orders
+
+  carts:
+    service_name: carts
+    service_description: Carts service. This service maintain all of carts and their details, using by front-end service to manage carts.
+    namespace: sock-shop
+    deploy_YAML_fp: 01-carts-dep.yaml
+    service_YAML_fp: 02-carts-svc.yaml
+    downstream_services: 
+      - carts-db
+    upstream_services: 
+      - front-end
+
+  carts-db:
+    service_name: carts-db
+    service_description: Carts database service. This service is the database of carts service, store all of carts and their details.
+    namespace: sock-shop
+    deploy_YAML_fp: 03-carts-db-dep.yaml
+    service_YAML_fp: 04-carts-db-svc.yaml
+    downstream_services: []
+    upstream_services: 
+      - carts
+
+  payment:
+    service_name: payment
+    service_description: Payment service. This service manage all of payments and their details, using by front-end service to manage payments.
+    namespace: sock-shop
+    deploy_YAML_fp: 15-payment-dep.yaml
+    service_YAML_fp: 16-payment-svc.yaml
+    downstream_services: []
+    upstream_services: 
+      - front-end
+
+  shipping:
+    service_name: shipping
+    service_description: Shipping service. This service manage all of shippings and their details, using by front-end service to manage shippings.
+    namespace: sock-shop
+    deploy_YAML_fp: 23-shipping-dep.yaml
+    service_YAML_fp: 24-shipping-svc.yaml
+    downstream_services: 
+      - rabbitmq
+    upstream_services: 
+      - orders
+  
+  rabbitmq:
+    service_name: rabbitmq
+    service_description: RabbitMQ service. This service is the message broker of shipping service, using to send and receive messages.
+    namespace: sock-shop
+    deploy_YAML_fp: 19-rabbitmq-dep.yaml
+    service_YAML_fp: 20-rabbitmq-svc.yaml
+    downstream_services: 
+      - queue-master
+    upstream_services: 
+      - shipping
+
+  queue-master:
+    service_name: queue-master
+    service_description: Queue master service. This service is the queue of shipping service, using to manage queues.
+    namespace: sock-shop
+    deploy_YAML_fp: 17-queue-master-dep.yaml
+    service_YAML_fp: 18-queue-master-svc.yaml
+    downstream_services: []
+    upstream_services: 
+      - shipping
