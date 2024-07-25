@@ -1,0 +1,17 @@
+namespace: sock-shop
+component: catalogue
+autonomous_level: 5
+workload: moderate
+environment:
+  delete: []
+  create: []
+  modify: []
+  unhealthy_pods: 0
+
+chaos:
+  type: PodFailure
+  selector:
+    labelSelectors:
+      name: catalogue
+  name: pod-failure-catalogue-mitigation
+  args: {}

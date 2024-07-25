@@ -1,0 +1,21 @@
+namespace: str
+component: str
+autonomous_level: int
+task: str
+workload: str in ['light', 'moderate', 'heavy', 'increase']
+environment:
+  delete: []
+  create: []
+  modify: 
+    - filename: str
+      create: []
+      delete: []
+      modify:
+        - jsonpath: str # example: $.spec.template.spec.containers[0].image
+          value: str # weaveworksdemos/catalogue:0.3.6
+  unhealthy_pods: int # indicate that 
+
+chaos:
+  type: str in Experiment
+  name: str
+  args: Dict[str, Any]
