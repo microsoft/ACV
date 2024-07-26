@@ -28,8 +28,8 @@ Prerequisite: Linux System Environment, Docker
 # conda activate acv_llm
 
 # clone the repo
-$ git clone https://github.com/microsoft/ACV.git
-$ cd ACV
+git clone https://github.com/microsoft/ACV.git
+cd ACV
 
 # install the requirements
 pip install -r requirements.txt
@@ -43,24 +43,30 @@ Before running ACV-LLM, you need configure your LLMs first, those configurations
 
 **OpenAI**
 ```yaml
-endpoint:
-  INTERVAL: 20
-  api_type: "openai" # The API type, "openai" for the OpenAI API.  
-  api_base: "https://api.openai.com/v1/chat/completions" # The OpenAI API endpoint.
-  api_version: "2024-02-01" # "2024-02-01" by default
-  api_model: "gpt-4-turbo-20240409" # only OpenAI model
-  api_key: "sk-" # The OpenAI API key, begin with sk-
+backend: "OpenAI" # The backend type, "OpenAI" for the OpenAI API.
+OpenAI:
+  model: "gpt-4" # Only OpenAI models are supported.
+  api_key: "sk-" # Your OpenAI API key.
 ```
 
 **AzureOpenAI**
 ```yaml
-endpoint:
-  INTERVAL: 20
-  api_type: "azure" # The API type, "azure" for the AzureOpenAI API.  
-  api_base: "https://cloudgpt-openai.azure-api.net/" # The AzureOpenAI API endpoint.
-  api_version: "2024-02-01" # "2024-02-01" by default
-  api_model: "gpt-4-turbo-20240409" # only AzureOpenAI model
-  api_key: "" # AzureOpenAI API token
+backend: "AzureOpenAI" # The backend type, "AzureOpenAI" for the Azure OpenAI API.
+AzureOpenAI:
+  model: "my-gpt-4-deployment" # The model name in Azure OpenAI.
+  api_type: "azure" # use "azure" for Azure OpenAI.
+  api_key: <API_KEY> # Your Azure OpenAI API key.
+  base_url: "https://ENDPOINT.openai.azure.com/" # The endpoint of your Azure OpenAI API.
+  api_version: "2024-02-01" # default to "2024-02-01".
+```
+
+**Other**
+```yaml
+backend: "Other" # The backend type, "Other" for the local API.
+Other:
+  model: "llama-7B" # The model name in your local API.
+  api_key: "" # Your local API key, optional.
+  base_url: "http://localhost:1234" # The endpoint of your local API.
 ```
 
 ### Step 3: Start ACV-LLM
@@ -154,7 +160,7 @@ bash src/remove_project.sh
 - [ ] Support more microservice demos.
 - [ ] Support other multi-agent frameworks to ACV-LLM.
 - [ ] Add a custom dashboard to manage the framework.
-- [ ] Realize the third working machinism.
+- [ ] Realize the third working mechanism.
 
 ## Contributing
 

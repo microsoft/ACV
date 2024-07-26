@@ -1,22 +1,18 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
-from autogen import UserProxyAgent
 from ..module import (
     load_config,
     get_prometheus_url
 )
 
 def load_llm_config(cache_seed: int | None = 42):
-    secret = load_config('secret.yaml')['endpoint']
+    secret = load_config('secret.yaml')
 
-    llm_config = {
-        "cache_seed": cache_seed,
-        "model": secret['api_model'],
-        "api_type": secret['api_type'],
-        "api_key": secret['api_key'],
-        "base_url": secret['api_base'],
-        "api_version": secret['api_version'],
-    }
+    backend = secret['backend']
+    assert backend in ['OpenAI', 'AzureOpenAI', 'Other'], f"Invalid backend"
+
+    llm_config = secret[backend]
+    llm_config['cache_seed'] = cache_seed
     return llm_config
 
 def load_service_maintainer_config(namespace:str, service_name:str, filename: str = 'service_maintainers.yaml'):
