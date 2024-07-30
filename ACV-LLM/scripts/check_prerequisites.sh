@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT License.
+
 sudo -v
 docker -v
 if [ $? -eq 0 ]; then
