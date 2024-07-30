@@ -20,7 +20,7 @@
 ## Getting Started
 
 ### Step 1: Installation
-Prerequisite: Linux System Environment, Docker
+Prerequisite: Linux System Environment, **[Docker](https://docs.docker.com/engine/install/)**, **[RabbitMQ](https://www.rabbitmq.com/docs/download)**
 
 ```bash
 # [optional to create conda environment]
@@ -31,11 +31,14 @@ Prerequisite: Linux System Environment, Docker
 git clone https://github.com/microsoft/ACV.git
 cd ACV/ACV-LLM
 
+# check if prerequisites are installed
+bash scripts/check_prerequisites.sh
+
 # install the requirements
 pip install -r requirements.txt
 
 # install required softwares, only for Ubuntu now, if you are using another system, please see setup.sh to get details
-bash setup.sh
+bash scripts/setup.sh
 ```
 
 ### Step 2: Configure the LLMs
@@ -127,7 +130,7 @@ You can explore your own task in our environment. Here are some examples for you
 ### Step 1: Build up evnironment
 Before you start, you need to build up the environment first. You can use the following command to build up the environment:
 ```bash
-bash src/create_project.sh
+bash scripts/create_project.sh
 ```
 
 ### Step 2: Design and run your own tasks
@@ -153,7 +156,7 @@ You can design your own task by changing the `--task` and `--components` paramet
 ### Step 3: Teardown environment
 After you finish your task, you can tear down the environment by using the following command:
 ```bash
-bash src/remove_project.sh
+bash scripts/remove_project.sh
 ```
 
 ## Todo List

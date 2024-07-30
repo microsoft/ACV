@@ -14,7 +14,6 @@ from autogen import UserProxyAgent
 from .module import (
     Logger,
     TrafficLoader,
-    MetricsCollector,
     EnvironmentManager,
     ChaosFactory,
     ChaosInjector,
@@ -60,23 +59,11 @@ def main(args: argparse.Namespace):
     traffic_loader = TrafficLoader(test_case=instance, logger=logger)
     traffic_loader.start()
 
-    # when traffic is ready, start collecting metrics
-    metrics_collector = MetricsCollector(test_case=instance, logger=logger)
-
     # make sure the cluster is stable
-    logger.info(f'Waiting for cluster to be stable, checking every 15 seconds...')
+    logger.info(f'Waiting for cluster to be stable, sleeping for 120 seconds...')
 
-    try:
-        while True:
-            time.sleep(15)
-            if metrics_collector.check_stable_state_by_pod(namespace=test_case['namespace'], pod_name=test_case['component']):
-                logger.info(f'Cluster is stable now.')
-                break
-    except KeyboardInterrupt:
-        logger.warning(f'Cluster is not stable, task execution interrupted.')
-        environment_manager.teardown()
-        traffic_loader.stop()
-        return
+    # wait for the cluster to be stable
+    time.sleep(120)
 
     if 'chaos' in test_case:
         chaos_config = test_case['chaos']
