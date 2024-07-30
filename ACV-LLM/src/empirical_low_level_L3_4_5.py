@@ -11,7 +11,6 @@ from .module import (
     ChaosFactory,
     ChaosInjector,
     TrafficLoader,
-    MetricsCollector,
     Logger,
     Selector,
     EnvironmentManager,
@@ -44,19 +43,11 @@ def main(args: argparse.Namespace):
     traffic_loader = TrafficLoader(test_case=instance, logger=logger)
     traffic_loader.start()
 
-    metrics_collector = MetricsCollector(test_case=instance, logger=logger)
+    # make sure the cluster is stable
+    logger.info(f'Waiting for cluster to be stable, sleeping for 120 seconds...')
 
-    try:
-        cnt = 0
-        while True:
-            time.sleep(15)
-            cnt += 1
-            if metrics_collector.check_stable_state_by_pod(namespace=test_case['namespace'], pod_name=test_case['component']):
-                logger.info(f'Cluster is stable now.')
-                break
-            if cnt > 20: break
-    except KeyboardInterrupt:
-        logger.warning(f'Cluster is not stable, task execution interrupted.')
+    # wait for the cluster to be stable
+    time.sleep(120)
 
     
     if 'chaos' in test_case:

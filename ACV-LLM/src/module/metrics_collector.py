@@ -74,7 +74,7 @@ class MetricsCollector(Base):
             return True
         
         for k, v in usage.items():
-            self.info('cpu_usage: {}, min_usage: {}, max_usage: {}'.format(v['cpu'], min_usage, max_usage))
+            self.info('cpu_usage: {:.2f}, min_usage: {:.2f}, max_usage: {:.2f}'.format(v['cpu'], min_usage, max_usage))
             if v['cpu'] == 'N/A' or v['memory'] == 'N/A':
                 continue
             if v['cpu'] > max_usage or v['cpu'] < min_usage:
