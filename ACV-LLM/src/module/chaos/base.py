@@ -52,6 +52,7 @@ class Chaos:
         self.spec['mode'] = self.mode
         if self.value:
             self.spec['value'] = self.value
+
         return {
             'kind': self.kind,
             'apiVersion': self.apiVersion,

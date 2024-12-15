@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
-from .environment_manager import EnvironmentManager
+from .environment_manager_factory import EnvironmentManagerFactory
 from .message_collector import MessageCollector
 from .consumer import ManagerConsumer, ServiceMaintainerConsumer
 from .metrics_collector import MetricsCollector

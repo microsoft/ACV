@@ -48,6 +48,7 @@ class ChaosInjector(Base):
 
         self.context = self._chaos.construct()
         result = subprocess.run(['kubectl', 'apply', '-f', self.fpath])
+        print(f'The chaos experiment is running with the following configuration: {self.fpath}')
         if result.returncode != 0:
             self.error('Failed to start experiment.')
             self._chaos = None

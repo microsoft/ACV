@@ -9,9 +9,13 @@ prompt_path: {{base_path}}/prompts/
 chaos_path: {{base_path}}/src/module/chaos/
 
 project:
+  deployment: kubernetes # ['kubernetes', 'helm']
   name: sock-shop
   namespace: sock-shop
   path: {{base_path}}/kubernetes/sock-shop/
+  # name: social-network # social-network
+  # namespace: social-network # social-network
+  # path: {{base_path}}/kubernetes/DeathstarBench/socialNetwork/helm-chart/socialnetwork/
 
 traffic_loader:
   backend: locust # supported backend: ['locust']
@@ -24,9 +28,13 @@ dataset:
   path: {{base_path}}/data/dataset/
 
 agent:
-  manager_prompt_template_path: {{base_path}}/prompts/cluster_manager-v2.yaml
+  framework: autogen # ["autogen", "agentscope"]
+  # manager_prompt_template_path: {{base_path}}/prompts/social-network-manager-v1.yaml
   manager_tool_functions_path: {{base_path}}/src/agent/tool_functions_for_manager.py
-  service_prompt_template_path: {{base_path}}/prompts/sock-shop-service-v8.yaml
+  # service_prompt_template_path: {{base_path}}/prompts/social-network-service-v2.yaml
+  manager_prompt_template_path: {{base_path}}/prompts/cluster_manager-v2.yaml
+  # manager_tool_functions_path: {{base_path}}/src/agent/tool_functions_for_manager.py
+  service_prompt_template_path: {{base_path}}/prompts/sock-shop-service-v10.yaml
   
 
 rabbitmq:
@@ -84,6 +92,23 @@ heartbeat:
         - If the issue persists after a few attempts, you should report the issue by calling `report_result` function. Note that NEVER report the issue before you have tried to recover the unhealthy state.
   group_task_prefix: |-
     TASK: You are a manager of kubernetes cluster, you need to check the status of all components you maintaining with below: \n
+
+workload:
+  light:
+    users: 20
+    spawn_rate: 20
+
+  moderate:
+    users: 50
+    spawn_rate: 50
+
+  heavy:
+    users: 80
+    spawn_rate: 80
+
+  increase:
+    users: 100
+    spawn_rate: 1
 mode2usage:
   light:
     min:

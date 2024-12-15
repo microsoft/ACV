@@ -22,6 +22,10 @@ class Prompter:
     @property
     def system_message(self):
         return self._system_message + '\n' + self._function_descptions
+    
+    @property
+    def critic_message(self):
+        return self._critic_message
 
     @property
     def user_content(self):
@@ -37,6 +41,8 @@ class Prompter:
             # prefill the system message and user content, so that we can use them directly if it contains no placeholders
             if 'system' in self.prompt:
                 self._system_message = self.prompt['system']
+            if 'critic' in self.prompt:
+                self._critic_message = self.prompt['critic']
             if 'user' in self.prompt:
                 self._user_content = self.prompt['user']
         else:
@@ -49,6 +55,14 @@ class Prompter:
         '''
         template = Template(self.prompt['system'])
         self._system_message = template.render(**placeholders)
+
+    def fill_critic_message(self, placeholders:dict):
+        '''
+        Fill the critic message with placeholders
+        - param placeholders: dict, dictionary of placeholders
+        '''
+        template = Template(self.prompt['critic'])
+        self._critic_message = template.render(**placeholders)
     
     def fill_user_content(self, placeholders:dict):
         '''

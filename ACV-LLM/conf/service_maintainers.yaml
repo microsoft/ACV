@@ -2,6 +2,53 @@ common:
   prometheus_url: <prometheus_url>
   tool_functions_path: src/agent/tool_functions_for_maintainer.py
 
+social-network:
+  media-frontend:
+    service_name: media-frontend
+    service_description: Media frontend service. This service is the frontend of social network application, using for user interaction with application to view posts, add posts, like posts etc.
+    namespace: social-network
+    values_YAML_fp: charts/media-frontend/values.yaml
+    chart_YAML_fp: charts/media-frontend/Chart.yaml
+    downstream_services: []
+    upstream_services: []
+
+  social-graph-service:
+    service_name: social-graph-service
+    service_description: Social graph service. This service maintain all of social graph and their details, using by media frontend service to manage social graph.
+    namespace: social-network
+    values_YAML_fp: charts/social-graph-service/values.yaml
+    chart_YAML_fp: charts/social-graph-service/Chart.yaml
+    downstream_services: []
+    upstream_services: 
+      - media-frontend
+  
+  text-service:
+    service_name: text-service
+    service_description: Text service. This service is the text service of social network application, using for text processing.
+    namespace: social-network
+    values_YAML_fp: charts/text-service/values.yaml
+    chart_YAML_fp: charts/text-service/Chart.yaml
+    downstream_services: []
+    upstream_services: []
+
+  user-service:
+    service_name: user-service
+    service_description: User service. This service maintain all of users and their details, using by media frontend service to manage users.
+    namespace: social-network
+    values_YAML_fp: charts/user-service/values.yaml
+    chart_YAML_fp: charts/user-service/Chart.yaml
+    downstream_services: []
+    upstream_services: 
+      - media-frontend
+
+  compose-post-service:
+    service_name: compose-post-service
+    service_description: Compose post service. This service is the compose post service of social network application, using for composing posts.
+    namespace: social-network
+    values_YAML_fp: charts/compose-post-service/values.yaml
+    chart_YAML_fp: charts/compose-post-service/Chart.yaml
+    downstream_services: []
+    upstream_services: []
 
 sock-shop:
   front-end:

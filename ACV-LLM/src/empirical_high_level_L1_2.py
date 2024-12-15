@@ -12,7 +12,7 @@ from .module import (
     load_config, 
     ManagerConsumer, 
     TrafficLoader,
-    EnvironmentManager,
+    EnvironmentManagerFactory,
     ServiceMaintainerConsumer,
     MessageCollector
 )
@@ -26,26 +26,44 @@ logger = Logger(__file__, 'INFO')
 global_config = load_config()
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Run high level experiments for L1/2 tasks.')
-    parser.add_argument('--task', type=str, help='Task descrption.', required=True)
-    parser.add_argument('--components', type=str, help='Components to run in this task, split by comma.', required=True)
-    parser.add_argument('--timeout', type=int, default=900, help='Time limit for the task.')
-    parser.add_argument('--cache_seed', type=int, default=42, help='Cache seed for agents. Default is 42, use -1 to disable cache seed.')
+    parser = argparse.ArgumentParser(
+        description='Run high level experiments for L1/2 tasks.'
+    )
+    parser.add_argument(
+        '--task', type=str, help='Task descrption.', required=True
+    )
+    parser.add_argument(
+        '--components', type=str, help='Components to run in this task, split by comma.', required=True
+    )
+    parser.add_argument(
+        '--timeout', type=int, default=900, help='Time limit for the task.'
+    )
+    parser.add_argument(
+        '--cache_seed', type=int, default=42, help='Cache seed for agents. Default is 42, use -1 to disable cache seed.'
+    )
     return parser.parse_args()
 
 def main(args: argparse.Namespace):
     logger.info('Starting the task...')
     now_time = datetime.now().strftime(r"%Y-%m-%d %H:%M:%S")
-    result_dir = os.path.join(global_config['base_path'], global_config['result_path'], now_time)
+    result_dir = os.path.join(
+        global_config['base_path'], 
+        global_config['result_path'], 
+        now_time
+    )
     os.makedirs(result_dir, exist_ok=True)
 
-    environment_manager = EnvironmentManager(logger=logger)
+    environment_manager_factory = EnvironmentManagerFactory.get_instance()
+    environment_manager = environment_manager_factory.get_environment(
+        global_config['project']['deployment'], 
+        logger=logger
+    )
     environment_manager.setup()
     environment_manager.check_pods_ready()
     
     traffic_loader = TrafficLoader(
-        component='front-end',
-        namespace='sock-shop',
+        component='media-frontend',
+        namespace='socical-network',
         mode='heavy',
         logger=logger
     )

@@ -32,15 +32,23 @@ class Consumer(Base):
 
         if log_file_path == 'auto':
             start_time = datetime.now().strftime(r"%Y-%m-%d %H:%M:%S")
-            result_path = os.path.join(global_config['result_path'], global_config['project']['name'])
+            result_path = os.path.join(
+                global_config['result_path'], global_config['project']['name']
+            )
             if not os.path.exists(result_path):
                 os.makedirs(result_path)
 
-            date_dir = os.path.join(result_path, start_time.split(' ')[0])
+            date_dir = os.path.join(
+                result_path, start_time.split(' ')[0]
+            )
             if not os.path.exists(date_dir):
                 os.makedirs(date_dir)
 
-            self.log_file_path = os.path.join(date_dir, f'{agent.name}_{start_time}.md')
+            self.log_file_path = (
+                os.path.join(
+                    date_dir, f'{agent.name}_{start_time}.md'
+                )
+            )
 
         self.trigger = UserProxyAgent(
             "trigger",
@@ -54,7 +62,9 @@ class Consumer(Base):
         super().__init__(**kwargs)
 
     def init_message_queue(self):
-        raise NotImplementedError("init_message_queue method is not implemented")
+        raise NotImplementedError(
+            "init_message_queue method is not implemented"
+        )
 
     def start(self):
         if self.process:
@@ -118,7 +128,9 @@ class ManagerConsumer(Consumer):
 
     def init_message_queue(self):
         queues = global_config['rabbitmq']['manager']['queues']
-        self.message_queue = RabbitMQ(**global_config['rabbitmq']['manager']['exchange'])
+        self.message_queue = RabbitMQ(
+            **global_config['rabbitmq']['manager']['exchange']
+        )
         for queue in queues:
             self.message_queue.add_queue(**queue)
         
@@ -136,7 +148,9 @@ class ServiceMaintainerConsumer(Consumer):
 
     def init_message_queue(self):
         queues = global_config['rabbitmq']['service_maintainer']['queues']
-        self.message_queue = RabbitMQ(**global_config['rabbitmq']['service_maintainer']['exchange'])
+        self.message_queue = RabbitMQ(
+            **global_config['rabbitmq']['service_maintainer']['exchange']
+        )
         for queue in queues:
             queue['name'] = self.name
             queue['routing_keys'] = [self.name]

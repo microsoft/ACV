@@ -74,7 +74,12 @@ class ClusterManager(SocietyOfMindAgent):
                 "timeout": 120,
             },
             default_auto_reply="",
-            is_termination_msg=lambda x: TERMINATE(x) or x.get('content', '').strip() == "" or x.get('content', '').find(AWAITING_FLAG) != -1,
+            is_termination_msg=(
+                lambda x: 
+                TERMINATE(x) 
+                or x.get('content', '').strip() == "" 
+                or x.get('content', '').find(AWAITING_FLAG) != -1
+            ),
         )
 
         groupchat = GroupChat(

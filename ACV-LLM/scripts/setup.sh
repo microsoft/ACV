@@ -26,8 +26,8 @@ init_minikube_environment() {
     REPO_URL="https://abdelrhmanhamouda.github.io/locust-k8s-operator/"
     if ! check_helm_repo $REPO_NAME $REPO_URL; then
         helm repo add $REPO_NAME $REPO_URL
-        helm install $REPO_NAME locust-k8s-operator/$REPO_NAME
     fi
+    helm install $REPO_NAME locust-k8s-operator/$REPO_NAME --set userProfile=v-fenglinyu
 
     # install Chaos Mesh
     # https://chaos-mesh.org/docs/production-installation-using-helm/
@@ -36,9 +36,9 @@ init_minikube_environment() {
     REPO_URL="https://charts.chaos-mesh.org"
     if ! check_helm_repo $REPO_NAME $REPO_URL; then
         helm repo add $REPO_NAME $REPO_URL
-        kubectl create ns chaos-mesh
-        helm install $REPO_NAME chaos-mesh/$REPO_NAME -n=chaos-mesh --version 2.6.3
     fi
+    kubectl create ns chaos-mesh
+    helm install $REPO_NAME chaos-mesh/$REPO_NAME -n=chaos-mesh --version 2.6.3
 
     # install Grafana and Prometheus from local file
     if ! kubectl get ns monitoring >/dev/null 2>&1; then

@@ -7,6 +7,7 @@ ACV is a huge vision of autonomic computing, we are working on a series of proje
 ## Projects
 View our projects in the following subdirectories:
 - [**ACV-LLM**](ACV-LLM/README.md): A multi-agent framework designed to achieve microservice self-management in line with ACV.
+- [**AutoKube**](AutoKube/README.md): A tool designed to simplify your microservice management in Kubernetes.
 
 ## Contributing
 

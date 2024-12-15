@@ -15,7 +15,7 @@ from .module import (
     load_config, 
     ManagerConsumer, 
     TrafficLoader,
-    EnvironmentManager,
+    EnvironmentManagerFactory,
     ServiceMaintainerConsumer,
     MessageCollector
 )
@@ -46,8 +46,10 @@ def main(args: argparse.Namespace):
     result_dir = os.path.join(global_config['base_path'], global_config['result_path'], now_time)
     os.makedirs(result_dir, exist_ok=True)
 
-    environment_manager = EnvironmentManager(logger=logger)
-    environment_manager.setup()
+    environment_manager_factory = EnvironmentManagerFactory.get_instance()
+    environment_manager = environment_manager_factory.get_environment(global_config['project']['deployment'], logger=logger)
+    environment_manager.setup(config_fpath=os.path.join(global_config['dataset']['path'], f'{instance}.yaml'))
+    environment_manager.check_pods_ready()
     
     traffic_loader = TrafficLoader(
         component='front-end',

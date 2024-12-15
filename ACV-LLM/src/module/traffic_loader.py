@@ -8,7 +8,7 @@ from .utils import fill_content_in_yaml, load_config, load_yaml
 from .base import Base
 
 
-config = load_config()
+global_config = load_config()
 
 class TrafficLoader(Base):
 
@@ -31,7 +31,7 @@ class TrafficLoader(Base):
             self.namespace = namespace
             self.mode = mode
         self.test_case = test_case
-        self.backend = config['traffic_loader']['backend']
+        self.backend = global_config['traffic_loader']['backend']
         self.external_args = kwargs
         if 'backend' in self.external_args:
             self.backend = self.external_args['backend']
@@ -43,7 +43,8 @@ class TrafficLoader(Base):
         '''
         Load traffic for locust
         '''
-        args: dict = load_yaml(os.path.join(config['data_path'], 'capacity', self.backend, self.namespace, f'{self.component}.yaml'))[self.mode]
+        args:dict = global_config['workload'][self.mode]
+        # args: dict = load_yaml(os.path.join(config['data_path'], 'capacity', self.backend, self.namespace, f'{self.component}.yaml'))[self.mode]
         for key in ['users', 'spawn_rate']:
             if self.external_args.get(key, None):
                 args[key] = self.external_args[key]
@@ -51,8 +52,8 @@ class TrafficLoader(Base):
             'component': self.component,
             'namespace': self.namespace,
         })
-        traffic = fill_content_in_yaml(config['traffic_loader']['template_path'], args)
-
+        traffic = fill_content_in_yaml(global_config['traffic_loader']['template_path'], args)
+        # print(traffic)
         return traffic
 
     def get_traffic(self):
@@ -66,6 +67,7 @@ class TrafficLoader(Base):
         Load traffic for the specified component
         '''
         traffic = self.get_traffic()
+        # print(traffic)
         subprocess.Popen(['kubectl', 'apply', '-f', '-'], stdin=subprocess.PIPE, text=True).communicate(traffic)
         self.info(f"Traffic load for {self.component} is set to {self.mode} mode")
 
@@ -73,5 +75,5 @@ class TrafficLoader(Base):
         '''
         Remove traffic for the specified component
         '''
-        subprocess.run(['kubectl', 'delete', '-f', config['traffic_loader']['template_path']], check=True)
+        subprocess.run(['kubectl', 'delete', '-f', global_config['traffic_loader']['template_path']], check=True)
         self.info(f"Traffic loaded for {self.component} is removed")

@@ -147,6 +147,7 @@ def save_yaml(yaml_fpath: str, data: dict):
         yaml.safe_dump(data, file, indent=2)
 
 def get_cluster_ip():
+    return "192.168.49.2"
     try:
         minikube_ip = subprocess.run(["minikube", "ip"], capture_output=True, text=True, check=True).stdout.strip()
     except subprocess.CalledProcessError:
@@ -158,3 +159,6 @@ def get_prometheus_url():
     assert minikube_ip != "", 'Minikube ip not found.'
     prometheus_url = f"http://{minikube_ip}:31090"
     return prometheus_url
+
+if __name__ == "__main__":
+    print(get_prometheus_url())
