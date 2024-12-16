@@ -1,8 +1,8 @@
 <h1 align="center">
-    <b>ACV: Can We Make the Vision of Autonomic Computing a Reality?</b>
+    <b>The Vision of Autonomic Computing: Can We Make it a Reality?</b>
 </h1>
 
-ACV stands for the Vision of Autonomic Computing. This repository collects all our ongoing work towards achieving ACV.
+This repository collects all our ongoing work towards achieving the Vision of Autonomic Computing (ACV).
 
 ## What is ACV?
 
@@ -13,10 +13,10 @@ The Vision of Autonomic Computing is a vision of self-managing systems that can 
  Despite significant efforts and progress over the past two decades, the realization of ACV is still elusive due to numerous grand challenges outlined in the ACV paper, many of which hinge on breakthroughs in AI. Recent advances in AI, particularly Large Language Models (LLMs), offer a unique opportunity to build upon and advance this vision. With their extensive knowledge, contextual understanding, and adaptive decision-making capabilities, LLMs appear well-suited to address longstanding challenges in autonomic computing. For instance, LLMs could be used to dynamically generate configurations for complex systems or provide real-time diagnostics and troubleshooting for large-scale cloud infrastructures.
 
 ## Workstreams
-To drive the ACV vision forward, we are currently working on two workstreams that address both traditional and emerging domains of autonomic computing. The first workstream emphasizes achieving ACV in managing large-scale distributed systems, a traditional domain of autonomic computing. For example, one ongoing work focuses on implementing ACV in microservice management. The second workstream centers on more personalized applications, such as Intelligent Personal Assistants (IPA), an emerging field driven by recent advancements in LLMs. Aligned with the principles of ACV, these projects aim to develop intelligent systems that autonomously engage with users, understand their needs, and help them with tailored assistance.
+To drive the ACV vision forward, we are currently working on two workstreams that address both traditional and emerging domains for applying autonomic computing. The first workstream emphasizes achieving ACV in managing large-scale distributed systems, a traditional domain of autonomic computing. For example, one ongoing work focuses on implementing ACV in microservice management. The second workstream centers on more personalized applications, such as Intelligent Personal Assistants (IPA), an emerging field driven by recent advancements in LLMs. Aligned with the principles of ACV, these projects aim to develop intelligent systems that autonomously engage with users, understand their needs, and help them with tailored assistance.
 
 Ongoing work include:
-- [**Microservice Management**](service_maintenance\microservice_management\ACV-LLM-paper\README.md): A multi-agent framework designed to achieve microservice self-management.
+- [**Microservice Management**](service_maintenance/microservice_management/ACV-LLM-paper/README.md): A multi-agent framework designed to achieve microservice self-management.
 - **IPA**: TBD.
 
 ## Contributing
