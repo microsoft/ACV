@@ -1,5 +1,6 @@
 <h1 align="center">
-    <b>The Vision of Autonomic Computing: Can We Make it a Reality?</b>
+    <b>The Vision of Autonomic Computing:</b>
+    <b>Can We Make it a Reality?</b>
 </h1>
 
 This repository collects all our ongoing work towards achieving the Vision of Autonomic Computing (ACV).
