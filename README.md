@@ -1,10 +1,21 @@
 <h1 align="center">
-    <b>ACV: The Vision of Autonomic Computing</b>
+    <b>ACV: Can We Make the Vision of Autonomic Computing a Reality?</b>
 </h1>
 
-ACV is a huge vision of autonomic computing, we are working on a series of projects to make it a reality. This repository is the root of all the projects under the ACV vision.
+ACV stands for the Vision of Autonomic Computing. We are working on a series of projects to make this vision a reality. This repository is the root of all the projects towards achieving ACV.
+
+## What is ACV?
+
+The Vision of Autonomic Computing is a vision of self-managing systems that can adapt to their environment and requirements. The vision, proposed in the early 2000s, emerged as a response to the growing complexity of managing computing systems. It has since become a long-standing goal in the field of computer science, highlighting the need for systems capable of self-management. The vision is based on four key properties: self-configuration, self-optimization, self-healing, and self-protection. These properties are designed to enable systems to manage themselves with minimal human intervention. For example, in cloud computing, a system utilizing these properties could automatically detect and recover from server failures, optimize resource allocation based on current demand, and defend against potential security threats without requiring manual oversight. More details can be found in the [ACV paper](https://ieeexplore.ieee.org/document/1160055) and the wikipedia page on [Autonomic Computing](https://en.wikipedia.org/wiki/Autonomic_computing).
+
+## Potential of Realizing ACV via LLMs
+
+ Despite significant efforts and progress over the past two decades, the realization of ACV is still elusive due to numerous grand challenges outlined in the ACV paper, many of which hinge on breakthroughs in AI. Recent advances in AI, particularly Large Language Models (LLMs), offer a unique opportunity to build upon and advance this vision. With their extensive knowledge, contextual understanding, and adaptive decision-making capabilities, LLMs appear well-suited to address longstanding challenges in autonomic computing. For instance, LLMs could be used to dynamically generate configurations for complex systems or provide real-time diagnostics and troubleshooting for large-scale cloud infrastructures.
 
 ## Projects
+Currently, we are working on two sets of projects. The first one is directly related to the topic of service self-management outlined in the ACV paper, in which we explore the potential of building LLM-based management system for senarios like microservice. The second one is to achieving ACV in an emerging domain, namely, Intelligent Personal Assistant (IPA), which  
+
+
 View our projects in the following subdirectories:
 - [**ACV-LLM**](service_maintenance/microservice_management/ACV-LLM-paper/README.md): A multi-agent framework designed to achieve microservice self-management in line with ACV.
 - [**AutoKube**](service_maintenance/microservice_management/AutoKube/README.md): A tool designed to simplify your microservice management in Kubernetes.
