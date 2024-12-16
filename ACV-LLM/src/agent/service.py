@@ -1,5 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
+
 from typing import Literal, Optional, Dict, Callable
 from autogen.agentchat.contrib.society_of_mind_agent import SocietyOfMindAgent
 from ..module import (
@@ -14,52 +15,57 @@ from autogen import (
 )
 from .utils import (
     load_llm_config,
-    load_llm_o1_config,
     load_service_maintainer_config,
     TERMINATE
 )
 
-import re
-
+# Load global configuration settings
 global_config = load_config()
 
 class ServiceMaintainer(SocietyOfMindAgent):
-    '''
-    A ServiceMaintainer is a SocietyOfMindAgent that manages a group chat with three agents: an assistant, a critic, and a code executor.
-    Every ServiceMaintainer maintains a microservice component in the system.
-    '''
+    """
+    ServiceMaintainer is a SocietyOfMindAgent that manages a microservice component
+    through a group chat involving an assistant, a code executor.
+    """
+
     def __init__(
-            self,
-            service_name: str,
-            service_description: str,
-            system_message: str,
-            critic_message: str,
-            human_input_mode: Literal["ALWAYS", "NEVER", "TERMINATE"] = "NEVER",
-            is_termination_msg: Optional[Callable[[Dict], bool]] = TERMINATE,
-            max_turns: int = 100,
-            cache_seed: int | None = 42,
-            **kwargs
-        ):
-        '''
-        Initialize a ServiceMaintainer.
-        - param service_name: The name of the service.
-        - param service_description: The description of the service.
-        - param system_message: The system message that will be displayed to the user.
-        - param human_input_mode: The mode of human input. Default is "NEVER".
-        - param is_termination_msg: The termination message. Default is TERMINATE.
-        - param max_turns: The maximum number of turns in the conversation. Default is 100.
-        - param cache_seed: The cache seed for the model. Default is 42.
-        - param kwargs: Additional keyword arguments.
-        '''
+        self,
+        service_name: str,
+        service_description: str,
+        system_message: str,
+        human_input_mode: Literal["ALWAYS", "NEVER", "TERMINATE"] = "NEVER",
+        is_termination_msg: Optional[Callable[[Dict], bool]] = TERMINATE,
+        max_turns: int = 100,
+        cache_seed: int | None = 42,
+        **kwargs
+    ):
+        """
+        Initialize a ServiceMaintainer agent.
+
+        Parameters:
+        - service_name (str): The name of the microservice being managed.
+        - service_description (str): A description of the microservice.
+        - system_message (str): The system-level prompt for the assistant agent.
+        - human_input_mode (Literal["ALWAYS", "NEVER", "TERMINATE"]): How human input is handled. Default is "NEVER".
+        - is_termination_msg (Optional[Callable[[Dict], bool]]): A function to determine when to terminate the chat. Default is TERMINATE.
+        - max_turns (int): Maximum conversation turns allowed. Default is 100.
+        - cache_seed (int | None): Seed for caching the language model. Default is 42.
+        - kwargs: Additional keyword arguments.
+        """
+        # Load LLM configuration using the provided cache seed
         llm_config = load_llm_config(cache_seed)
-        # llm_o1_config = load_llm_o1_config(cache_seed)
-        # print(f"LLM config: {llm_o1_config}")
-        # print(f"LLM config: {llm_config}")
         self.service_name = service_name
 
-        # Assistant agent
+        # Define the assistant agent
         class ServiceMaintainerAgent(ConversableAgent):
+            """
+            The assistant agent responsible for reasoning and planning actions for the service.
+            """
+
             def __init__(self):
+                """
+                Initialize the assistant agent.
+                """
                 self.__steps: int = 0
                 super().__init__(
                     name=f'{service_name}-assistant',
@@ -67,110 +73,50 @@ class ServiceMaintainer(SocietyOfMindAgent):
                     max_consecutive_auto_reply=max_turns,
                     human_input_mode="NEVER",
                     llm_config=llm_config,
-                    # llm_config=llm_o1_config,
                     **kwargs
                 )
-           
 
             def _process_received_message(self, message, sender, silent):
+                """
+                Process messages received by the assistant.
+
+                Parameters:
+                - message: The message content received.
+                - sender: The sender of the message.
+                - silent: If True, suppress output during processing.
+                """
                 self.__steps += 1
                 print(f'==================== Step {self.__steps} ====================')
                 return super()._process_received_message(message, sender, silent)
 
+        # Instantiate the assistant agent
         self.assistant = ServiceMaintainerAgent()
 
-        # Code executor agent
+        # Define the code executor agent
         self._code_executor = UserProxyAgent(
             f"{service_name}-code-executor",
             human_input_mode="NEVER",
             code_execution_config={
-                "work_dir": global_config['base_path'],
-                "use_docker": False,
-                "timeout": 240,
-                "last_n_messages": 10,
+                "work_dir": global_config['base_path'],  # Working directory for executing code
+                "use_docker": False,  # Docker is not used for isolation
+                "timeout": 240,  # Timeout for code execution in seconds
+                "last_n_messages": 10,  # Number of messages to keep for context
             },
             default_auto_reply="",
             is_termination_msg=is_termination_msg,
         )
 
-        # Critic agent
-        class CriticAgent(ConversableAgent):
-            def __init__(self, service_name, max_turns, llm_config, **kwargs):
-                super().__init__(
-                    name=f'{service_name}-critic',
-                    system_message=critic_message,
-                    max_consecutive_auto_reply=max_turns,
-                    human_input_mode="NEVER",
-                    llm_config=llm_config,
-                    # llm_config=llm_o1_config,
-                    **kwargs
-                )
-
-            def evaluate_message(self, message):
-                # Receive the assistant's message
-                self.receive_message(message, self.assistant.name)
-                
-                # Generate evaluation based on the received message
-                evaluation = self.auto_reply()
-                    
-                return evaluation
-
-
-        self.critic = CriticAgent(service_name=service_name, max_turns=max_turns, llm_config=llm_config)
-
-        def contains_executable_code(message_content):
-            bash_pattern = r"```bash[\s\S]*?```"
-            python_pattern = r"```python[\s\S]*?```"
-            if re.search(bash_pattern, message_content) or re.search(python_pattern, message_content):
-                return True
-            return False
-
-        # Define the custom speaker selection function
-        def custom_speaker_selection_func(last_speaker, groupchat):
-            assistant = groupchat.agent_by_name(f'{service_name}-assistant')
-            critic = groupchat.agent_by_name(f'{service_name}-critic')
-            code_executor = groupchat.agent_by_name(f'{service_name}-code-executor')
-
-            if last_speaker is None:
-                return assistant
-            elif last_speaker == assistant:
-                return critic
-            elif last_speaker == critic:
-                last_message = last_speaker.last_message()
-                if 'APPROVED' in last_message.get('content', '').upper():
-                    return code_executor
-                else:
-                    with open('decline.md', 'a') as f:
-                        f.write(f"\n# Context\n")
-                        f.write(f"{groupchat.messages[-2].get('content', '')}\n")
-                        f.write(f"# Judgement\n")
-                        f.write(f"{last_message.get('content', '')}\n")
-                    return assistant
-            elif last_speaker == code_executor:
-                return assistant
-            else:
-                return assistant
-
-        ### Update the GroupChat
-        # groupchat = GroupChat(
-        #     agents=[self.assistant, self.critic, self._code_executor],
-        #     admin_name=f'{service_name}-assistant',
-        #     messages=[],
-        #     speaker_selection_method=custom_speaker_selection_func,
-        #     allow_repeat_speaker=False,
-        #     max_round=max_turns,
-        # )
-
+        # Define the group chat for interaction
         groupchat = GroupChat(
             agents=[self.assistant, self._code_executor],
             admin_name=f'{service_name}-assistant',
             messages=[],
-            speaker_selection_method='round_robin',
+            speaker_selection_method='round_robin',  # Alternate turns between agents
             allow_repeat_speaker=False,
             max_round=max_turns,
         )
 
-        # Use the default GroupChatManager
+        # Define the group chat manager
         manager = GroupChatManager(
             groupchat=groupchat,
             name=f'{service_name}-group-manager',
@@ -182,6 +128,7 @@ class ServiceMaintainer(SocietyOfMindAgent):
             llm_config=llm_config,
         )
 
+        # Initialize the parent class with the chat manager
         super().__init__(
             service_name,
             chat_manager=manager,
@@ -193,28 +140,43 @@ class ServiceMaintainer(SocietyOfMindAgent):
 
     @staticmethod
     def _init_from_config(service_name: str, cache_seed: int | None = 42, is_termination_msg: Optional[Callable[[Dict], bool]] = TERMINATE):
-        '''
-        Init ServiceMaintainer from service_maintainers.yaml
-        - param service_name: str, the name of the service.
-        - param cache_seed: int | None, the cache seed for the model. Default is 42.
-        - param is_termination_msg: Optional[Callable[[Dict], bool]], the termination message. Default is TERMINATE.
-        '''
+        """
+        Static method to initialize a ServiceMaintainer from configuration.
+
+        Parameters:
+        - service_name (str): The name of the service being managed.
+        - cache_seed (int | None): Seed for caching the language model. Default is 42.
+        - is_termination_msg (Optional[Callable[[Dict], bool]]): A function to determine when to terminate the chat.
+
+        Returns:
+        - ServiceMaintainer: An initialized ServiceMaintainer agent.
+        """
+        # Load the service maintainer configuration
         service_maintainer_config = load_service_maintainer_config(global_config['project']['name'], service_name)
+
+        # Initialize the prompter and load templates
         prompter = Prompter()
         prompter.load_prompt_template(global_config['agent']['service_prompt_template_path'])
         prompter.fill_system_message(service_maintainer_config)
         prompter.generate_function_descriptions(service_maintainer_config['tool_functions_path'])
+
+        # Create and return the ServiceMaintainer instance
         agent = ServiceMaintainer(
             service_name=service_maintainer_config['service_name'],
             service_description=service_maintainer_config['service_description'],
             system_message=prompter.system_message,
-            critic_message=prompter.critic_message,
             is_termination_msg=is_termination_msg,
             cache_seed=cache_seed,
         )
         return agent
 
     def __repr__(self):
+        """
+        Representation of the ServiceMaintainer instance.
+
+        Returns:
+        - str: A string representation of the agent, including its name, description, and backend model.
+        """
         return (
             f"ServiceMaintainer({self.name})\n "
             f"Description: {self.description}\n backend: {self.model}"

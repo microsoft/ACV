@@ -13,13 +13,10 @@ project:
   name: sock-shop
   namespace: sock-shop
   path: {{base_path}}/kubernetes/sock-shop/
-  # name: social-network # social-network
-  # namespace: social-network # social-network
-  # path: {{base_path}}/kubernetes/DeathstarBench/socialNetwork/helm-chart/socialnetwork/
 
 traffic_loader:
   backend: locust # supported backend: ['locust']
-  template_path: {{base_path}}/kubernetes/locust/locust.yaml
+  template_path: {{base_path}}/kubernetes/locust/locust_no_persistent_connection.yaml
 
 metrics_collector:
   backend: prometheus
@@ -29,12 +26,9 @@ dataset:
 
 agent:
   framework: autogen # ["autogen", "agentscope"]
-  # manager_prompt_template_path: {{base_path}}/prompts/social-network-manager-v1.yaml
   manager_tool_functions_path: {{base_path}}/src/agent/tool_functions_for_manager.py
-  # service_prompt_template_path: {{base_path}}/prompts/social-network-service-v2.yaml
-  manager_prompt_template_path: {{base_path}}/prompts/cluster_manager-v2.yaml
-  # manager_tool_functions_path: {{base_path}}/src/agent/tool_functions_for_manager.py
-  service_prompt_template_path: {{base_path}}/prompts/sock-shop-service-v10.yaml
+  manager_prompt_template_path: {{base_path}}/prompts/cluster_manager.yaml
+  service_prompt_template_path: {{base_path}}/prompts/sock-shop-service.yaml
   
 
 rabbitmq:

@@ -36,6 +36,7 @@ bash scripts/check_prerequisites.sh
 
 # install the requirements
 pip install -r requirements.txt
+pip install azure-identity-broker --upgrade
 
 # install required softwares, only for Ubuntu now, if you are using another system, please see setup.sh to get details
 bash scripts/setup.sh

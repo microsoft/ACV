@@ -28,6 +28,7 @@ init_minikube_environment() {
         helm repo add $REPO_NAME $REPO_URL
     fi
     helm install $REPO_NAME locust-k8s-operator/$REPO_NAME --set userProfile=v-fenglinyu
+    kubectl apply -f kubernetes/locust/locust-operator-rabc.yaml
 
     # install Chaos Mesh
     # https://chaos-mesh.org/docs/production-installation-using-helm/

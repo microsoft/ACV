@@ -3,80 +3,110 @@
 from .base import Base
 from .utils import get_resource_limit_by_pod, get_resource_usage_by_pod, format_resource_data, load_config
 
-
 config = load_config()
 
 class MetricsCollector(Base):
+    """
+    MetricsCollector provides methods to collect and analyze resource metrics for Kubernetes pods,
+    such as resource limits, usage, and stability checks.
+    """
 
     def __init__(self, test_case: str = None, **kwargs):
+        """
+        Initialize the MetricsCollector.
+
+        Args:
+        - test_case (str, optional): The test case name to load. Default is None.
+        - kwargs (dict): Additional arguments for the Base class.
+        """
         super().__init__(**kwargs)
         self.timer = None
-        self.interval = 15
+        self.interval = 15  # Default collection interval in seconds
         if test_case:
             self.load_test_case(test_case)
 
-    def get_resource_limit_by_pod(self, namespace:str='default', pod_name:str=''):
-        '''
-        Get resource limits by pod using kubectl
-        - param namespace: str, namespace of the pod
-        - param pod_name: str, name of the pod
-        - return: dict, pod resource limits
-        '''
+    def get_resource_limit_by_pod(self, namespace: str = 'default', pod_name: str = '') -> dict:
+        """
+        Retrieve resource limits for a specific pod.
+
+        Args:
+        - namespace (str, optional): The namespace of the pod. Default is 'default'.
+        - pod_name (str, optional): The name of the pod. Default is ''.
+
+        Returns:
+        - dict: Resource limits for the specified pod.
+        """
         return get_resource_limit_by_pod(namespace=namespace, pod_name=pod_name)
 
-    def get_resource_usage_by_pod(self, namespace:str='default', pod_name:str=''):
-        '''
-        Get resource usage by pod using kubectl
-        - param namespace: str, namespace of the pod
-        - param pod_name: str, name of the 
-        - return: dict, pod resource usage
-        '''
+    def get_resource_usage_by_pod(self, namespace: str = 'default', pod_name: str = '') -> dict:
+        """
+        Retrieve resource usage for a specific pod.
+
+        Args:
+        - namespace (str, optional): The namespace of the pod. Default is 'default'.
+        - pod_name (str, optional): The name of the pod. Default is ''.
+
+        Returns:
+        - dict: Resource usage for the specified pod.
+        """
         return get_resource_usage_by_pod(namespace=namespace, pod_name=pod_name)
 
-    def get_resource_usage_percentage_by_pod(self, namespace:str='default', pod_name:str=''):
-        '''
-        Get resource usage percentage by pod
-        - param namespace: str, namespace of the pod
-        - param pod_name: str, name of the pod
-        - return: dict, resource usage percentage
-        Note: resource usage contains all pods in the namespace, where resource limit only contains the specified pods
-        '''
+    def get_resource_usage_percentage_by_pod(self, namespace: str = 'default', pod_name: str = '') -> dict:
+        """
+        Calculate the resource usage percentage for a specific pod.
+
+        Args:
+        - namespace (str, optional): The namespace of the pod. Default is 'default'.
+        - pod_name (str, optional): The name of the pod. Default is ''.
+
+        Returns:
+        - dict: Resource usage percentages for CPU and memory.
+        """
         limit = self.get_resource_limit_by_pod(namespace=namespace, pod_name=pod_name)
         usage = self.get_resource_usage_by_pod(namespace=namespace, pod_name=pod_name)
         limit = format_resource_data(limit)
         usage = format_resource_data(usage)
         result = {}
-        for k, v in limit.items():
-            if k not in usage:
-                result[k] = {
+
+        for pod, limits in limit.items():
+            if pod not in usage:
+                result[pod] = {
                     'cpu': 'N/A',
                     'memory': 'N/A'
                 }
             else:
-                result[k] = {
-                    'cpu': usage[k]['cpu'] / v['cpu'] * 100,
-                    'memory': usage[k]['memory'] / v['memory'] * 100
+                result[pod] = {
+                    'cpu': (usage[pod]['cpu'] / limits['cpu']) * 100,
+                    'memory': (usage[pod]['memory'] / limits['memory']) * 100
                 }
         return result
 
-    def check_stable_state_by_pod(self, namespace:str='default', pod_name:str=''):
-        '''
-        Check if the pod is in a stable state
-        - param namespace: str, namespace of the pod
-        - param pod_name: str, name of the pod
-        - param threshold: float, threshold of the resource usage
-        - return: bool, True if the pod is in a stable state, False otherwise
-        '''
+    def check_stable_state_by_pod(self, namespace: str = 'default', pod_name: str = '') -> bool:
+        """
+        Check if the pod is in a stable state based on resource usage.
+
+        Args:
+        - namespace (str, optional): The namespace of the pod. Default is 'default'.
+        - pod_name (str, optional): The name of the pod. Default is ''.
+
+        Returns:
+        - bool: True if the pod is in a stable state, False otherwise.
+        """
         min_usage = float(config['mode2usage'][self.mode]['min']['cpu'])
         max_usage = float(config['mode2usage'][self.mode]['max']['cpu'])
         usage = self.get_resource_usage_percentage_by_pod(namespace=namespace, pod_name=pod_name)
-        if len(usage) == 0:
-            return True
+
+        if not usage:
+            return True  # No usage data implies stable state
         
-        for k, v in usage.items():
-            self.info('cpu_usage: {:.2f}, min_usage: {:.2f}, max_usage: {:.2f}'.format(v['cpu'], min_usage, max_usage))
-            if v['cpu'] == 'N/A' or v['memory'] == 'N/A':
-                continue
-            if v['cpu'] > max_usage or v['cpu'] < min_usage:
+        for pod, metrics in usage.items():
+            self.info(
+                'Pod: {}, CPU Usage: {:.2f}%, Min Usage: {:.2f}%, Max Usage: {:.2f}%'.format(
+                    pod, metrics['cpu'], min_usage, max_usage
+                )
+            )
+            if metrics['cpu'] == 'N/A' or metrics['memory'] == 'N/A':
+                continue  # Skip unavailable metrics
+            if metrics['cpu'] > max_usage or metrics['cpu'] < min_usage:
                 return False
         return True

@@ -1,0 +1,24 @@
+# 定义 ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: locust-k8s-operator-role
+rules:
+  - apiGroups: ["locust.io"]
+    resources: ["locusttests"]
+    verbs: ["get", "list", "watch"]
+
+---
+# 定义 ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: locust-k8s-operator-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: locust-k8s-operator-role
+subjects:
+  - kind: ServiceAccount
+    name: locust-k8s-operator
+    namespace: default

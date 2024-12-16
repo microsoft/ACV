@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT License.
+
 import traceback
-from typing import overload
+from typing import overload, Optional, Dict, Any, Union
 from datetime import datetime, timedelta
 from prometheus_api_client import PrometheusConnect
 
@@ -11,123 +12,180 @@ from .base import Base
 global_config = load_config()
 
 class PrometheusClient(Base):
+    """
+    A client for interacting with a Prometheus instance to execute queries and fetch metrics data.
+    """
 
     def __init__(self):
+        """
+        Initialize the PrometheusClient and connect to the Prometheus instance.
+        """
         super().__init__()
         self.prom = self.__connect()
 
-    def __connect(self):
-        '''
-        Connect to the prometheus instance running in minikube
-        '''
+    def __connect(self) -> PrometheusConnect:
+        """
+        Establish a connection to the Prometheus instance.
+
+        Returns:
+        - PrometheusConnect: An instance of the Prometheus client.
+
+        Raises:
+        - AssertionError: If the Prometheus connection fails.
+        """
         prometheus_url = get_prometheus_url()
         prom = PrometheusConnect(url=prometheus_url, disable_ssl=True)
-        assert prom.check_prometheus_connection(), f"Prometheus connection failed, please check the prometheus url: {prometheus_url}"
+        assert prom.check_prometheus_connection(), f"Prometheus connection failed. Please check the URL: {prometheus_url}"
         return prom
 
-    def query(self, query: str, params: dict = None):
-        '''
-        Query the prometheus instance with the given query
-        - param query: str, query to be executed
-        - param params: dict, parameters to be passed to the query
-        - return: list, result of the query
-        '''
+    def query(self, query: str, params: Optional[Dict[str, Any]] = None) -> list:
+        """
+        Execute an instant query on the Prometheus instance.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - params (dict, optional): Additional parameters for the query.
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
         result = self.prom.custom_query(query=query, params=params)
-        if len(result):
-            result = result[0].get('value', None)
-        if not result:
-            result = []
+        if result and 'value' in result[0]:
+            result = [[datetime.fromtimestamp(result[0]['value'][0]).strftime(r'%Y-%m-%d %H:%M:%S'), float(result[0]['value'][1])]]
         else:
-            result = [[datetime.fromtimestamp(x[0]).strftime(r'%Y-%m-%d %H:%M:%S'), float(x[1])] for x in result]
+            result = []
         return result
-    
+
     @overload
-    def query_range(self, query: str, start_time: str, end_time: str, step: str, time_format: str= r'%Y-%m-%dT%H:%M:%SZ', params = None):
-        '''
-        Query the prometheus instance with the given query 
-        - param query: str, query to be executed
-        - param start_time: str, start time of the query, format: time_format
-        - param end_time: str, end time of the query, format: time_format
-        - param step: str, step of the query, format: 14(s), 1s, 1m, 1h, 1d, 1w
-        - param time_format: str, format of the time
-        - param params: dict, parameters to be passed to the query
-        - return: list, result of the query
-        '''
-        pass
-        
+    def query_range(self, query: str, start_time: str, end_time: str, step: str, time_format: str = r'%Y-%m-%dT%H:%M:%SZ', params: Optional[Dict[str, Any]] = None) -> list:
+        """
+        Query Prometheus over a time range with string-based timestamps.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - start_time (str): The start time in the specified format.
+        - end_time (str): The end time in the specified format.
+        - step (str): The step interval, e.g., '1m', '1h'.
+        - time_format (str, optional): The format of the timestamps. Default is ISO 8601.
+        - params (dict, optional): Additional parameters for the query.
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
+        ...
+
     @overload
-    def query_range(self, query: str, duration: str, step: str, params: dict = None):
-        '''
-        Query the prometheus instance with the given query
-        - param query: str, query to be executed
-        - param duration: str, duration of the query, format: 1s, 1m, 1h, 1d, 1w
-        - param step: str, step of the query, format: 14(s), 1s, 1m, 1h, 1d, 1w
-        - param params: list, parameters to be passed to the query
-        '''
-        pass
-        
+    def query_range(self, query: str, duration: str, step: str, params: Optional[Dict[str, Any]] = None) -> list:
+        """
+        Query Prometheus over a relative time range.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - duration (str): The time duration (e.g., '1h', '2d').
+        - step (str): The step interval, e.g., '1m', '1h'.
+        - params (dict, optional): Additional parameters for the query.
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
+        ...
+
     @overload
-    def query_range(self, query: str, start_time:datetime, end_time:datetime, step: str, params: dict = None):
-        '''
-        Query the prometheus instance with the given query
-        - param query: str, query to be executed
-        - param start_time: datetime, start time of the query
-        - param end_time: datetime, end time of the query
-        - param step: str, step of the query, format: 14(s), 1s, 1m, 1h, 1d, 1w
-        - param params: dict, parameters to be passed to the query
-        - return: list, result of the query
-        '''
-        pass
-        
-    def query_range_by_duration(self, query: str, duration: str, step: str, params: dict = None):
-        unit_2time = {
-            's': 1,
-            'm': 60,
-            'h': 60 * 60,
-            'd': 60 * 60 * 24,
-            'w': 60 * 60 * 7,
-        }
+    def query_range(self, query: str, start_time: datetime, end_time: datetime, step: str, params: Optional[Dict[str, Any]] = None) -> list:
+        """
+        Query Prometheus over a time range with datetime objects.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - start_time (datetime): The start time of the query.
+        - end_time (datetime): The end time of the query.
+        - step (str): The step interval, e.g., '1m', '1h'.
+        - params (dict, optional): Additional parameters for the query.
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
+        ...
+
+    def query_range_by_duration(self, query: str, duration: str, step: str, params: Optional[Dict[str, Any]] = None) -> list:
+        """
+        Query Prometheus over a relative time range based on a duration.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - duration (str): The time duration (e.g., '1h', '2d').
+        - step (str): The step interval, e.g., '1m', '1h'.
+        - params (dict, optional): Additional parameters for the query.
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
+        unit_to_seconds = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400, 'w': 604800}
         now = datetime.now()
-        start_time = now - timedelta(seconds=unit_2time[duration[-1]] * int(duration[:-1]))
+        start_time = now - timedelta(seconds=unit_to_seconds[duration[-1]] * int(duration[:-1]))
         return self.query_range_by_datetime(query=query, start_time=start_time, end_time=now, step=step, params=params)
 
-    def query_range_by_str(self, query: str, start_time: str, end_time: str, step: str, time_format: str = r'%Y-%m-%dT%H:%M:%SZ', params = None):
+    def query_range_by_str(self, query: str, start_time: str, end_time: str, step: str, time_format: str = r'%Y-%m-%dT%H:%M:%SZ', params: Optional[Dict[str, Any]] = None) -> list:
+        """
+        Query Prometheus over a time range with string-based timestamps.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - start_time (str): The start time in the specified format.
+        - end_time (str): The end time in the specified format.
+        - step (str): The step interval, e.g., '1m', '1h'.
+        - time_format (str, optional): The format of the timestamps. Default is ISO 8601.
+        - params (dict, optional): Additional parameters for the query.
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
         try:
             start_time = datetime.strptime(start_time, time_format)
             end_time = datetime.strptime(end_time, time_format)
-        except Exception as e:
-            self.error(e)
-            return None
+        except ValueError as e:
+            self.error(f"Invalid time format: {e}")
+            return []
         return self.query_range_by_datetime(query=query, start_time=start_time, end_time=end_time, step=step, params=params)
-    
-    def query_range_by_datetime(self, query: str, start_time: datetime, end_time: datetime, step: str, params: dict = None):
+
+    def query_range_by_datetime(self, query: str, start_time: datetime, end_time: datetime, step: str, params: Optional[Dict[str, Any]] = None) -> list:
+        """
+        Query Prometheus over a time range with datetime objects.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - start_time (datetime): The start time of the query.
+        - end_time (datetime): The end time of the query.
+        - step (str): The step interval, e.g., '1m', '1h'.
+        - params (dict, optional): Additional parameters for the query.
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
         result = self.prom.custom_query_range(query=query, start_time=start_time, end_time=end_time, step=step, params=params)
-        if len(result):
-            result = result[0].get('values', None)
-        if result is None:
-            result = []
-        else:
-            result = [[datetime.fromtimestamp(x[0]).strftime(r'%Y-%m-%d %H:%M:%S'), float(x[1])] for x in result]
-        return result
-    
-    def query_range(self, query: str, **kwargs):
-        '''
-        function entry, using for query prometheus with variant parameters
-        - param query: str, query to be executed
-        - param kwargs: dict, parameters to be passed to the query, must contain one of the following: (start_time, end_time), duration
-        - return: list, result of the query
-        '''
+        if result and 'values' in result[0]:
+            return [[datetime.fromtimestamp(value[0]).strftime(r'%Y-%m-%d %H:%M:%S'), float(value[1])] for value in result[0]['values']]
+        return []
+
+    def query_range(self, query: str, **kwargs) -> Optional[list]:
+        """
+        Main entry for querying Prometheus with variant parameters.
+
+        Args:
+        - query (str): The PromQL query to execute.
+        - kwargs (dict): Parameters for the query (e.g., start_time, end_time, duration, step).
+
+        Returns:
+        - list: The query results as a list of [timestamp, value] pairs.
+        """
         try:
-            if 'params' not in kwargs:
-                kwargs['params'] = None
             if 'duration' in kwargs:
-                return self.query_range_by_duration(query, kwargs['duration'], kwargs['step'], kwargs['params'])
-            elif isinstance(kwargs['start_time'], datetime) and isinstance(kwargs['end_time'], datetime):
-                return self.query_range_by_datetime(query, kwargs['start_time'], kwargs['end_time'], kwargs['step'], kwargs['params'])
-            elif isinstance(kwargs['start_time'], str) and isinstance(kwargs['end_time'], str):
-                if 'time_format' not in kwargs:
-                    kwargs['time_format'] = r'%Y-%m-%dT%H:%M:%SZ'
-                return self.query_range_by_str(query, kwargs['start_time'], kwargs['end_time'], kwargs['step'], kwargs['time_format'], kwargs['params'])
-        except:
-            self.error(traceback.print_exc())
-            return None
+                return self.query_range_by_duration(query, kwargs['duration'], kwargs['step'], kwargs.get('params'))
+            elif isinstance(kwargs.get('start_time'), datetime) and isinstance(kwargs.get('end_time'), datetime):
+                return self.query_range_by_datetime(query, kwargs['start_time'], kwargs['end_time'], kwargs['step'], kwargs.get('params'))
+            elif isinstance(kwargs.get('start_time'), str) and isinstance(kwargs.get('end_time'), str):
+                return self.query_range_by_str(query, kwargs['start_time'], kwargs['end_time'], kwargs['step'], kwargs.get('time_format', r'%Y-%m-%dT%H:%M:%SZ'), kwargs.get('params'))
+        except Exception as e:
+            self.error(f"Query execution failed: {e}")
+            traceback.print_exc()
+        return None
