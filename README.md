@@ -13,12 +13,11 @@ The Vision of Autonomic Computing is a vision of self-managing systems that can 
  Despite significant efforts and progress over the past two decades, the realization of ACV is still elusive due to numerous grand challenges outlined in the ACV paper, many of which hinge on breakthroughs in AI. Recent advances in AI, particularly Large Language Models (LLMs), offer a unique opportunity to build upon and advance this vision. With their extensive knowledge, contextual understanding, and adaptive decision-making capabilities, LLMs appear well-suited to address longstanding challenges in autonomic computing. For instance, LLMs could be used to dynamically generate configurations for complex systems or provide real-time diagnostics and troubleshooting for large-scale cloud infrastructures.
 
 ## Projects
-Currently, we are working on two sets of projects. The first one is directly related to the topic of service self-management outlined in the ACV paper, in which we explore the potential of building LLM-based management system for senarios like microservice. The second one is to achieving ACV in an emerging domain, namely, Intelligent Personal Assistant (IPA), which  
-
+Currently, we are working on two series of projects. The first one is for pursuing ACV for managing "non-human" related systems, which is a traditional domain of autonomic computing. For example, we are working on a project to acheive ACV in microservice management. The other series of projects are for managing "human" related systems, such as Intelligent Personal Assistant (IPA), which is an emerging fields due to the recent advancements of LLMs. In the same spirit of ACV, the second series of projects aim to build intelligent assistants that autonomously engage with users to understand them and help them.
 
 View our projects in the following subdirectories:
-- [**ACV-LLM**](service_maintenance/microservice_management/ACV-LLM-paper/README.md): A multi-agent framework designed to achieve microservice self-management in line with ACV.
-- [**AutoKube**](service_maintenance/microservice_management/AutoKube/README.md): A tool designed to simplify your microservice management in Kubernetes.
+- [**Service Maintenance**](service_maintenance\microservice_management\ACV-LLM-paper\README.md): A multi-agent framework designed to achieve microservice self-management in line with ACV.
+- **IPA**: TBD.
 
 ## Contributing
 
