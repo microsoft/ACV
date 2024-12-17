@@ -1,5 +1,5 @@
 <h1 align="center">
-    <b>Autokube</b>
+    <b>AutoKube: Simplify Your Microservice Management in Kubernetes</b>
 </h1>
 
 
@@ -14,28 +14,31 @@
     <img src="assets/AutoKube.png" width="100">
 </div>
 
-**AutoKube** provides an automated framework for deploying, managing, and experimenting with microservice-based systems on Kubernetes clusters.
+**AutoKube** aims to simplify the management of microservices in Kubernetes by leveraging a Large Language Model (LLM)-powered agent management system. AutoKube is designed to streamline both development and operations phases of the DevOps lifecycle, aligning with the respective roles of developers (**Dev**) and operators (**Ops**).
+* [**Dev**] Development of Agent-based Management System: AutoKube facilitates setting up an agent-based management system for microservices. This helps developers quickly establish self-managing systems powered by LLM-based agents. See the [Dev](#dev) section for more details.
+* [**Ops**] Operations with the Agent-based Management System: AutoKube provides an intuitive tool for microservice operators to manage services, even with limited familiarity, using LLM-based agents. See the [Ops](#ops) section for more details.
+
+This project is a work in progress, and contributions from the community are highly encouraged! Watch this [6-min introduction video](https://youtu.be/IFFLb5mgzY0) to learn more.
+
+AutoKube is inspired by research on applying LLM-based agents for microservice self-management. For more details, see [paper_artifact_arXiv_2407_14402](../paper_artifact_arXiv_2407_14402/README.md) for more details. 
 
 
-## Roles
-For Developers, refer to the [Dev](#dev) section. For Users, refer to the [Ops](#ops) section.
-
-## Dev
+## Dev: Setting up AutoKube for Your Microservice
+This section guides developers through setting up AutoKube for a microservice.
 ### Setup Minikube
-First, run the bash script to set up a Minikube cluster. Follow the instructions displayed in the terminal.
+Run the following script to set up a Minikube cluster. Follow the on-screen instructions during execution:
 ```bash
 sh scripts/dev/minikube.sh
 ```
 
 ### Setup Prometheus Deployment
-Next, run the bash script to set up the Prometheus deployment. Additionally, forward the Prometheus port to enable metric checking, which is also intregated in the bash file.
-
+Run the following script to deploy Prometheus and forward its port for metrics monitoring. Port forwarding is integrated into the script:
 ```bash
 sh scripts/dev/prometheus.sh
 ```
 
-### (Optional) Setup Services
-Finally, you can setup the services by applying the bash script, to apply your own services, you can reference the code in src/exp_setup.
+### Setup Services
+You can deploy example services using the script below. For custom services, refer to the code in src/exp_setup.
 
 ```bash
 sh scripts/dev/service.sh
@@ -55,7 +58,7 @@ kubectl config use-context <context-name>
 ```
 
 
-## Ops
+## Ops: Using AutoKube for Your Microservice
 For Ops, we provide an easy-to-use command-line tool, AutoKube. By following the instructions below, you can simplify the management of your microservices.
 ```bash
 ./AutoKube
