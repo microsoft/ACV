@@ -95,7 +95,7 @@ system: |-
             ```python
             # Import tools function from file first
             from intent_exec.agent.tool_functions_for_maintainer import query_prometheus
-            promQL = 'histogram_quantile(0.99, rate(request_duration_seconds_bucket{name="home-timeline-service", operation="read"}[1m]))'
+            promQL = 'histogram_quantile(0.99, rate(request_duration_seconds_bucket{name="home-timeline-service"}[1m]))'
             duration = '2m'
             step = '1m'
             result = query_prometheus(promQL, duration=duration, step=step)

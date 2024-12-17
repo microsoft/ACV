@@ -205,10 +205,10 @@ def checkLatency(promQL_name):
     timestamp, latency = last_entry[0], float(last_entry[1])
 
     if latency < 0.2:
-        print(f"Latency: {latency * 1000}ms < 200ms at {timestamp}")
+        print(f"Latency: {latency}ms < 200ms at {timestamp}")
         return True
     else:
-        print(f"Latency: {latency * 1000}ms > 200ms at {timestamp}")
+        print(f"Latency: {latency}ms > 200ms at {timestamp}")
         return False
 
 if __name__ == "__main__":

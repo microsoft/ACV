@@ -5,6 +5,7 @@ from typing import overload
 from datetime import datetime, timedelta
 from prometheus_api_client import PrometheusConnect
 from .base import Base
+from .utils import get_prometheus_url
 
 class PrometheusClient(Base):
 
@@ -16,7 +17,7 @@ class PrometheusClient(Base):
         '''
         Connect to the prometheus instance running in minikube
         '''
-        prometheus_url = "http://localhost:9090"
+        prometheus_url = get_prometheus_url()
         prom = PrometheusConnect(url=prometheus_url, disable_ssl=True)
         assert prom.check_prometheus_connection(), f"Prometheus connection failed, please check the prometheus url: {prometheus_url}"
         return prom

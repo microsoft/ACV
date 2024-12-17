@@ -1,172 +1,180 @@
 #!/bin/bash
 
-# ===================== 颜色定义 =====================
-RED='\033[1;31m'    # Bold Red for errors or critical inputs
-GREEN='\033[1;32m'  # Bold Green for prompts and success messages
-YELLOW='\033[1;33m' # Bold Yellow for input and warnings
-BLUE='\033[1;34m'   # Bold Blue for parameter values
-NC='\033[0m'        # No color
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+NC='\033[0m'
 
-# ===================== 函数定义（Chaos Mesh安装和卸载） =====================
 check_helm_repo() {
     local repo_name=$1
     helm repo list | grep -q "$repo_name"
 }
 
 setup_chaos_mesh() {
-    echo -e "${GREEN}Starting the installation of Chaos Mesh...${NC}"
+    printf "${GREEN}Starting the installation of Chaos Mesh...${NC}\n"
     REPO_NAME="chaos-mesh"
     REPO_URL="https://charts.chaos-mesh.org"
 
     if ! check_helm_repo "$REPO_NAME"; then
-        echo -e "${YELLOW}Adding Helm repo: ${BLUE}$REPO_NAME${NC}"
+        printf "${YELLOW}Adding Helm repo: ${BLUE}%s${NC}\n" "$REPO_NAME"
         helm repo add "$REPO_NAME" "$REPO_URL"
         helm repo update
-        echo -e "${GREEN}Helm repo added and updated successfully.${NC}"
+        printf "${GREEN}Helm repo added and updated successfully.${NC}\n"
     else
-        echo -e "${BLUE}Helm repo ${REPO_NAME} already exists.${NC}"
+        printf "${BLUE}Helm repo ${REPO_NAME} already exists.${NC}\n"
     fi
 
-    echo -e "${YELLOW}Checking for 'chaos-mesh' namespace...${NC}"
+    printf "${YELLOW}Checking for 'chaos-mesh' namespace...${NC}\n"
     if ! kubectl get ns chaos-mesh &>/dev/null; then
-        echo -e "${YELLOW}Creating namespace 'chaos-mesh'...${NC}"
+        printf "${YELLOW}Creating namespace 'chaos-mesh'...${NC}\n"
         kubectl create ns chaos-mesh
-        echo -e "${GREEN}Namespace 'chaos-mesh' created.${NC}"
+        printf "${GREEN}Namespace 'chaos-mesh' created.${NC}\n"
     else
-        echo -e "${BLUE}Namespace 'chaos-mesh' already exists.${NC}"
+        printf "${BLUE}Namespace 'chaos-mesh' already exists.${NC}\n"
     fi
 
-    echo -e "${YELLOW}Installing or upgrading Chaos Mesh...${NC}"
+    printf "${YELLOW}Installing or upgrading Chaos Mesh...${NC}\n"
     helm upgrade --install "$REPO_NAME" chaos-mesh/"$REPO_NAME" -n chaos-mesh --version 2.6.3
-    echo -e "${GREEN}Chaos Mesh installation/upgrade completed.${NC}"
+    if [ $? -eq 0 ]; then
+        printf "${GREEN}Chaos Mesh installation/upgrade completed.${NC}\n"
+    else
+        printf "${RED}Chaos Mesh installation/upgrade failed.${NC}\n"
+        exit 1
+    fi
 }
 
 uninstall_chaos_mesh() {
-    echo -e "${RED}Uninstalling Chaos Mesh...${NC}"
+    printf "${RED}Uninstalling Chaos Mesh...${NC}\n"
     helm uninstall chaos-mesh -n chaos-mesh
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Chaos Mesh uninstalled successfully.${NC}"
+        printf "${GREEN}Chaos Mesh uninstalled successfully.${NC}\n"
     else
-        echo -e "${RED}Error during Chaos Mesh uninstallation.${NC}"
+        printf "${RED}Error during Chaos Mesh uninstallation.${NC}\n"
     fi
 
-    echo -e "${YELLOW}Deleting namespace 'chaos-mesh'...${NC}"
+    printf "${YELLOW}Deleting namespace 'chaos-mesh'...${NC}\n"
     kubectl delete ns chaos-mesh &>/dev/null
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Namespace 'chaos-mesh' deleted successfully.${NC}"
+        printf "${GREEN}Namespace 'chaos-mesh' deleted successfully.${NC}\n"
     else
-        echo -e "${BLUE}Namespace 'chaos-mesh' already deleted or does not exist.${NC}"
+        printf "${BLUE}Namespace 'chaos-mesh' already deleted or does not exist.${NC}\n"
     fi
 }
 
-# ===================== 函数定义（Chaos 注入） =====================
-# 列出chaos注入类型
 list_chaos_injection_types() {
-    echo -e "${GREEN}Available types of chaos injection:${NC}"
+    printf "${GREEN}Available types of chaos injection:${NC}\n"
     if [[ -d "src/chaos_inject/chaos_yaml" ]]; then
         local found_file=false
         for file in src/chaos_inject/chaos_yaml/*.yaml; do
             if [[ -e "$file" ]]; then
                 found_file=true
-                echo -e "- ${BLUE}$(basename "$file" .yaml)${NC}"
+                printf -- "- ${BLUE}%s${NC}\n" "$(basename "$file" .yaml)"
             fi
         done
         if [[ $found_file == false ]]; then
-            echo -e "${RED}No chaos injection types found.${NC}"
+            printf "${RED}No chaos injection types found.${NC}\n"
             exit 1
         fi
     else
-        echo -e "${RED}Directory src/chaos_inject/chaos_yaml does not exist.${NC}"
+        printf "${RED}Directory src/chaos_inject/chaos_yaml does not exist.${NC}\n"
         exit 1
     fi
 }
 
-# 列出Kubernetes Namespaces
 list_kubernetes_namespaces() {
-    echo -e "${GREEN}Available Kubernetes namespaces:${NC}"
+    printf "${GREEN}Available Kubernetes namespaces:${NC}\n"
     namespaces=$(kubectl get namespaces --no-headers -o custom-columns=":metadata.name")
     if [[ -z "$namespaces" ]]; then
-        echo -e "${RED}No namespaces found.${NC}"
+        printf "${RED}No namespaces found.${NC}\n"
         exit 1
     fi
     echo "$namespaces" | while read -r ns; do
-        echo -e "- ${BLUE}$ns${NC}"
+        printf -- "- ${BLUE}%s${NC}\n" "$ns"
     done
 }
 
-# 列出Namespace中的服务
 list_services_in_namespace() {
     local namespace=$1
-    echo -e "${GREEN}Available services in namespace '${BLUE}$namespace${GREEN}':${NC}"
+    printf "${GREEN}Available services in namespace '${BLUE}%s${GREEN}':${NC}\n" "$namespace"
     services=$(kubectl get services -n "$namespace" --no-headers -o custom-columns=":metadata.name")
     if [[ -z "$services" ]]; then
-        echo -e "${RED}No services found in namespace '$namespace'.${NC}"
+        printf "${RED}No services found in namespace '$namespace'.${NC}\n"
         exit 1
     fi
     echo "$services" | while read -r svc; do
-        echo -e "- ${BLUE}$svc${NC}"
+        printf -- "- ${BLUE}$svc${NC}\n"
     done
 }
 
 inject_chaos() {
-    # 列出并选择chaos类型
     list_chaos_injection_types
-    echo -e "${GREEN}Please specify the type of chaos injection:${NC}"
+    printf "${GREEN}Please specify the type of chaos injection: ${BLUE}"
     read CHAOS_TYPE
+    printf "${NC}"
 
-    # 列出并选择namespace
     list_kubernetes_namespaces
-    echo -e "${GREEN}Please specify the Kubernetes namespace:${NC}"
+    printf "${GREEN}Please specify the Kubernetes namespace: ${BLUE}"
     read NAMESPACE
+    printf "${NC}"
 
-    # 列出并选择service
     list_services_in_namespace "$NAMESPACE"
-    echo -e "${GREEN}Please specify the service name:${NC}"
+    printf "${GREEN}Please specify the service name: ${BLUE}"
     read SERVICE
+    printf "${NC}"
 
-    # 显示参数
-    echo -e "${GREEN}Injecting chaos with the following parameters:${NC}"
-    echo -e "  ${BLUE}Type:${NC} $CHAOS_TYPE"
-    echo -e "  ${BLUE}Namespace:${NC} $NAMESPACE"
-    echo -e "  ${BLUE}Service:${NC} $SERVICE"
+    printf "${GREEN}Injecting chaos with the following parameters:${NC}\n"
+    printf "  ${BLUE}Type:${NC} %s\n" "$CHAOS_TYPE"
+    printf "  ${BLUE}Namespace:${NC} %s\n" "$NAMESPACE"
+    printf "  ${BLUE}Service:${NC} %s\n" "$SERVICE"
 
-    # 调用 Python 脚本执行注入
     python3 -m src.chaos_inject.main --operation "inject" --namespace "$NAMESPACE" --component "$SERVICE" --chaostype "$CHAOS_TYPE"
+    if [ $? -eq 0 ]; then
+        printf "${GREEN}Chaos injection completed successfully.${NC}\n"
+    else
+        printf "${RED}Chaos injection failed.${NC}\n"
+        exit 1
+    fi
 }
 
 deprecate_chaos() {
-    # 列出并选择chaos类型
     list_chaos_injection_types
-    echo -e "${GREEN}Please specify the type of chaos injection to deprecate:${NC}"
+    printf "${GREEN}Please specify the type of chaos injection to deprecate: ${BLUE}"
     read CHAOS_TYPE
+    printf "${NC}"
 
-    # 列出并选择namespace
     list_kubernetes_namespaces
-    echo -e "${GREEN}Please specify the Kubernetes namespace:${NC}"
+    printf "${GREEN}Please specify the Kubernetes namespace: ${BLUE}"
     read NAMESPACE
+    printf "${NC}"
 
-    # 列出并选择service
     list_services_in_namespace "$NAMESPACE"
-    echo -e "${GREEN}Please specify the service name to deprecate chaos:${NC}"
+    printf "${GREEN}Please specify the service name to deprecate chaos: ${BLUE}"
     read SERVICE
+    printf "${NC}"
 
-    # 显示参数
-    echo -e "${GREEN}Deprecating chaos injection with the following parameters:${NC}"
-    echo -e "  ${BLUE}Type:${NC} $CHAOS_TYPE"
-    echo -e "  ${BLUE}Namespace:${NC} $NAMESPACE"
-    echo -e "  ${BLUE}Service:${NC} $SERVICE"
+    printf "${GREEN}Deprecating chaos injection with the following parameters:${NC}\n"
+    printf "  ${BLUE}Type:${NC} %s\n" "$CHAOS_TYPE"
+    printf "  ${BLUE}Namespace:${NC} %s\n" "$NAMESPACE"
+    printf "  ${BLUE}Service:${NC} %s\n" "$SERVICE"
 
-    # 调用 Python 脚本撤销注入
     python3 -m src.chaos_inject.main --operation "deprecate" --namespace "$NAMESPACE" --component "$SERVICE" --chaostype "$CHAOS_TYPE"
+    if [ $? -eq 0 ]; then
+        printf "${GREEN}Chaos deprecation completed successfully.${NC}\n"
+    else
+        printf "${RED}Chaos deprecation failed.${NC}\n"
+        exit 1
+    fi
 }
 
-# ===================== 主逻辑入口 =====================
-echo -e "${GREEN}Please select an operation:${NC}"
-echo -e "${YELLOW}setup-mesh${NC}     - Install or upgrade Chaos Mesh"
-echo -e "${YELLOW}uninstall-mesh${NC} - Uninstall Chaos Mesh and delete namespace"
-echo -e "${YELLOW}inject${NC}         - Inject chaos into a service"
-echo -e "${YELLOW}deprecate${NC}      - Deprecate an existing chaos injection"
+printf "${GREEN}Please select an operation:${NC}\n"
+printf "${YELLOW}setup-mesh${NC}     - Install or upgrade Chaos Mesh\n"
+printf "${YELLOW}uninstall-mesh${NC} - Uninstall Chaos Mesh and delete namespace\n"
+printf "${YELLOW}inject${NC}         - Inject chaos into a service\n"
+printf "${YELLOW}deprecate${NC}      - Deprecate an existing chaos injection\n"
+printf "${GREEN}Enter your choice: ${BLUE}"
 read OPERATION
+printf "${NC}"
 
 case $OPERATION in
     setup-mesh)
@@ -182,7 +190,7 @@ case $OPERATION in
         deprecate_chaos
         ;;
     *)
-        echo -e "${RED}Invalid operation selected. Please choose from 'setup-mesh', 'uninstall-mesh', 'inject', or 'deprecate'.${NC}"
+        printf "${RED}Invalid operation selected. Please choose from 'setup-mesh', 'uninstall-mesh', 'inject', or 'deprecate'.${NC}\n"
         exit 1
         ;;
 esac

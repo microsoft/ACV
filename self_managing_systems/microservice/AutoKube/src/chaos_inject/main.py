@@ -42,8 +42,8 @@ if __name__ == '__main__':
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description='Inject or delete chaos in the system.')
     parser.add_argument(
-        '--operation', type=str, choices=['inject', 'delete'], required=True,
-        help='Specify the operation: inject or delete.'
+        '--operation', type=str, choices=['inject', 'deprecate'], required=True,
+        help='Specify the operation: inject or deprecate.'
     )
     parser.add_argument(
         '--namespace', type=str, default='sock-shop',
@@ -71,5 +71,5 @@ if __name__ == '__main__':
     # Perform the specified operation
     if args.operation == 'inject':
         inject_chaos(chaos_yaml_path)
-    elif args.operation == 'delete':
+    elif args.operation == 'deprecate':
         delete_chaos(chaos_yaml_path)

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
 NC='\033[0m'
 
 : ${MINKUBE_CPUS:=6}
@@ -14,57 +14,57 @@ check_minikube_status() {
 }
 
 setup_minikube() {
-    echo -e "${GREEN}Setting up Minikube and required tools...${NC}"
-    echo -e "${YELLOW}Requesting root access...${NC}"
+    printf "${GREEN}Setting up Minikube and required tools...${NC}\n"
+    printf "${YELLOW}Requesting root access...${NC}\n"
     sudo -v
 
     minikube version
     if [ $? -eq 0 ]; then
-        echo -e "${BLUE}Minikube is already installed.${NC}"
+        printf "${BLUE}Minikube is already installed.${NC}\n"
     else
-        echo -e "${YELLOW}Installing Minikube...${NC}"
+        printf "${YELLOW}Installing Minikube...${NC}\n"
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
     fi
 
-    kubectl version
+    kubectl version --client
     if [ $? -eq 0 ]; then
-        echo -e "${BLUE}Kubectl is already installed.${NC}"
+        printf "${BLUE}Kubectl is already installed.${NC}\n"
     else
-        echo -e "${YELLOW}Installing kubectl...${NC}"
+        printf "${YELLOW}Installing kubectl...${NC}\n"
         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
         sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && rm kubectl
     fi
 
     helm version
     if [ $? -eq 0 ]; then
-        echo -e "${BLUE}Helm is already installed.${NC}"
+        printf "${BLUE}Helm is already installed.${NC}\n"
     else
-        echo -e "${YELLOW}Installing Helm...${NC}"
+        printf "${YELLOW}Installing Helm...${NC}\n"
         curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
         chmod 700 get_helm.sh && ./get_helm.sh && rm get_helm.sh
     fi
 
     if ! check_minikube_status; then
-        echo -e "${YELLOW}Starting Minikube with $MINKUBE_CPUS CPUs and $MINIKUBE_MEMORY MB memory...${NC}"
+        printf "${YELLOW}Starting Minikube with %s CPUs and %s MB memory...${NC}\n" "$MINKUBE_CPUS" "$MINIKUBE_MEMORY"
         minikube start --cpus=$MINKUBE_CPUS --memory=$MINIKUBE_MEMORY
     else
-        echo -e "${BLUE}Minikube is already running.${NC}"
+        printf "${BLUE}Minikube is already running.${NC}\n"
     fi
 
-    echo -e "${YELLOW}Enabling Minikube addons...${NC}"
-    minikube addons enable ingress
-    echo -e "${GREEN}Minikube setup completed.${NC}"
+    printf "${YELLOW}Enabling Minikube addons...${NC}\n"
+    minikube addons enable metrics-server
+    printf "${GREEN}Minikube setup completed.${NC}\n"
 }
 
 deprecate_minikube() {
-    echo -e "${RED}Stopping and deleting Minikube...${NC}"
+    printf "${RED}Stopping and deleting Minikube...${NC}\n"
     minikube stop
     minikube delete
-    echo -e "${GREEN}Minikube has been stopped and deleted.${NC}"
+    printf "${GREEN}Minikube has been stopped and deleted.${NC}\n"
 }
 
-echo -e "${GREEN}Please enter an operation: ${BLUE}setup${GREEN} or ${RED}deprecate${NC}"
+printf "${GREEN}Please enter an operation: ${BLUE}setup${GREEN} or ${RED}deprecate${NC}\n"
 read operation
 
 case $operation in
@@ -75,6 +75,6 @@ case $operation in
         deprecate_minikube
         ;;
     *)
-        echo -e "${RED}Invalid operation! Please choose 'setup' or 'deprecate'.${NC}"
+        printf "${RED}Invalid operation! Please choose 'setup' or 'deprecate'.${NC}\n"
         ;;
 esac

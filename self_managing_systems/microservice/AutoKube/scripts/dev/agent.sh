@@ -1,57 +1,54 @@
 #!/bin/bash
 
-RED='\033[1;31m'    
-GREEN='\033[1;32m'  
-YELLOW='\033[1;33m' 
-BLUE='\033[1;34m'   
-NC='\033[0m'        
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+NC='\033[0m'
 
-echo -e "${GREEN}Please enter an operation: ${BLUE}setup${GREEN} or ${BLUE}deprecate${NC}"
+printf "${GREEN}Please enter an operation: ${BLUE}setup${GREEN} or ${RED}deprecate${NC}\n"
 read operation
 
+namespaces=$(kubectl get ns -o jsonpath='{.items[*].metadata.name}')
+
+printf "${GREEN}Available namespaces:${NC}\n"
+for ns in $namespaces; do
+    printf " - ${BLUE}%s${NC}\n" "$ns"
+done
+
 case $operation in
-    setup)  
-        echo -e "${GREEN}Enter the experiment name (${BLUE}social-network${GREEN} or ${BLUE}sock-shop${GREEN}):${NC}"
-        read experiment
-        experiment=$(echo $experiment | xargs)
+    setup)
+        printf "${GREEN}Enter the namespace from the above list:${NC}\n"
+        read namespace
+        namespace=$(echo "$namespace" | xargs)
 
-        if [ "$experiment" = "social-network" ] || [ "$experiment" = "sock-shop" ]; then
-            echo -e "${YELLOW}Setting up the experiment: ${BLUE}$experiment${YELLOW}...${NC}"
-            python -m src.agent_creation.main --experiment "$experiment" --setup
-            if [ $? -eq 0 ]; then
-                echo -e "${GREEN}Setup for ${BLUE}$experiment${GREEN} completed successfully!${NC}"
-            else
-                echo -e "${RED}Failed to setup the experiment: ${BLUE}$experiment${NC}"
-                exit 1
-            fi
+        printf "${YELLOW}Setting up the agents in namespace: ${BLUE}%s${YELLOW}...${NC}\n" "$namespace"
+        python -m src.agent_creation.main --namespace "$namespace" --setup
+        if [ $? -eq 0 ]; then
+            printf "${GREEN}Setup of agents in ${BLUE}%s${GREEN} completed successfully!${NC}\n" "$namespace"
         else
-            echo -e "${RED}Invalid experiment name. Please enter either 'social-network' or 'sock-shop'.${NC}"
+            printf "${RED}Failed to set up the agents in namespace: ${BLUE}%s${NC}\n" "$namespace"
             exit 1
         fi
         ;;
 
-    deprecate)  
-        echo -e "${GREEN}Enter the experiment name to deprecate (${BLUE}social-network${GREEN} or ${BLUE}sock-shop${GREEN}):${NC}"
-        read experiment
-        experiment=$(echo $experiment | xargs)
+    deprecate)
+        printf "${GREEN}Enter the namespace from the above list to deprecate:${NC}\n"
+        read namespace
+        namespace=$(echo "$namespace" | xargs)
 
-        if [ "$experiment" = "social-network" ] || [ "$experiment" = "sock-shop" ]; then
-            echo -e "${YELLOW}Deprecating the experiment: ${BLUE}$experiment${YELLOW}...${NC}"
-            python -m src.agent_creation.main --experiment "$experiment"
-            if [ $? -eq 0 ]; then
-                echo -e "${GREEN}Deprecation of ${BLUE}$experiment${GREEN} completed successfully!${NC}"
-            else
-                echo -e "${RED}Failed to deprecate the experiment: ${BLUE}$experiment${NC}"
-                exit 1
-            fi
+        printf "${YELLOW}Deprecating the namespace: ${BLUE}%s${YELLOW}...${NC}\n" "$namespace"
+        python -m src.agent_creation.main --namespace "$namespace"
+        if [ $? -eq 0 ]; then
+            printf "${GREEN}Deprecation of namespace ${BLUE}%s${GREEN} completed successfully!${NC}\n" "$namespace"
         else
-            echo -e "${RED}Invalid experiment name. Please enter either 'social-network' or 'sock-shop'.${NC}"
+            printf "${RED}Failed to deprecate the namespace: ${BLUE}%s${NC}\n" "$namespace"
             exit 1
         fi
         ;;
 
-    *)  
-        echo -e "${RED}Invalid operation. Please enter either 'setup' or 'deprecate'.${NC}"
+    *)
+        printf "${RED}Invalid operation. Please enter either 'setup' or 'deprecate'.${NC}\n"
         exit 1
         ;;
 esac

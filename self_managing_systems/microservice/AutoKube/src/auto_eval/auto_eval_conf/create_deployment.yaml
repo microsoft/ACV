@@ -1,5 +1,0 @@
-types: command
-command: |
-  kubectl get deployment ${self.component} -n ${self.namespace} -o jsonpath='{.status.readyReplicas}'
-operator: "equal"
-value: "1"

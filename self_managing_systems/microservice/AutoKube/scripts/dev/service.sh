@@ -6,53 +6,59 @@ YELLOW='\033[1;33m'
 BLUE='\033[1;34m'
 NC='\033[0m'
 
-echo -e "${GREEN}Please enter an operation: ${BLUE}setup${GREEN} or ${BLUE}deprecate${NC}"
+printf "${GREEN}Please enter an operation: ${BLUE}setup${GREEN} or ${RED}deprecate${NC}\n"
 read operation
 
 case $operation in
     setup)
-        echo -e "${GREEN}Enter the experiment name (${BLUE}social-network${GREEN} or ${BLUE}sock-shop${GREEN}):${NC}"
+        printf "${GREEN}Enter the experiment name:${NC}\n"
+        printf " - ${BLUE}social-network${NC}\n"
+        printf " - ${BLUE}sock-shop${NC}\n"
+        printf "${NC}"
         read experiment
-        experiment=$(echo $experiment | xargs)
+        experiment=$(echo "$experiment" | xargs)
 
         if [ "$experiment" = "social-network" ]; then
-            echo -e "${YELLOW}Setting up for social-network...${NC}"
+            printf "${YELLOW}Setting up for social-network...${NC}\n"
             git clone https://github.com/delimitrou/DeathStarBench.git
             minikube mount "$(pwd)/DeathStarBench:/DeathStarBench" &
             kubectl create namespace social-network
             helm install "$experiment" "./experiment_environment/$experiment" --namespace "$experiment"
-            echo -e "${GREEN}Setup for social-network completed successfully!${NC}"
+            printf "${GREEN}Setup for social-network completed successfully!${NC}\n"
         elif [ "$experiment" = "sock-shop" ]; then
-            echo -e "${YELLOW}Setting up for sock-shop...${NC}"
+            printf "${YELLOW}Setting up for sock-shop...${NC}\n"
             kubectl apply -f experiment_environment/sock-shop-backup
-            echo -e "${GREEN}Setup for sock-shop completed successfully!${NC}"
+            printf "${GREEN}Setup for sock-shop completed successfully!${NC}\n"
         else
-            echo -e "${RED}Invalid experiment name. Please enter either 'social-network' or 'sock-shop'.${NC}"
+            printf "${RED}Invalid experiment name. Please enter either 'social-network' or 'sock-shop'.${NC}\n"
             exit 1
         fi
         ;;
 
     deprecate)
-        echo -e "${GREEN}Enter the experiment name to deprecate (${BLUE}social-network${GREEN} or ${BLUE}sock-shop${GREEN}):${NC}"
+        printf "${GREEN}Enter the experiment name to deprecate:${NC}\n"
+        printf " - ${BLUE}social-network${NC}\n"
+        printf " - ${BLUE}sock-shop${NC}\n"
+        printf "${NC}"
         read experiment
-        experiment=$(echo $experiment | xargs)
+        experiment=$(echo "$experiment" | xargs)
 
         if [ "$experiment" = "social-network" ]; then
-            echo -e "${YELLOW}Deprecating social-network...${NC}"
+            printf "${YELLOW}Deprecating social-network...${NC}\n"
             kubectl delete namespace social-network
-            echo -e "${GREEN}Deprecation of social-network completed successfully!${NC}"
+            printf "${GREEN}Deprecation of social-network completed successfully!${NC}\n"
         elif [ "$experiment" = "sock-shop" ]; then
-            echo -e "${YELLOW}Deprecating sock-shop...${NC}"
+            printf "${YELLOW}Deprecating sock-shop...${NC}\n"
             kubectl delete namespace sock-shop
-            echo -e "${GREEN}Deprecation of sock-shop completed successfully!${NC}"
+            printf "${GREEN}Deprecation of sock-shop completed successfully!${NC}\n"
         else
-            echo -e "${RED}Invalid experiment name. Please enter either 'social-network' or 'sock-shop'.${NC}"
+            printf "${RED}Invalid experiment name. Please enter either 'social-network' or 'sock-shop'.${NC}\n"
             exit 1
         fi
         ;;
 
     *)
-        echo -e "${RED}Invalid operation. Please enter either 'setup' or 'deprecate'.${NC}"
+        printf "${RED}Invalid operation. Please enter either 'setup' or 'deprecate'.${NC}\n"
         exit 1
         ;;
 esac

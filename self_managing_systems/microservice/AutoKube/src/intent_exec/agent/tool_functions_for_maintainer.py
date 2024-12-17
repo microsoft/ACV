@@ -16,14 +16,13 @@ def query_prometheus(promQL: str, **kwargs) -> list:
     2. request_duration_seconds_bucket: for lantency metric.
 
     1. name: the service name.
-    2. status_code: the status code of the request.
-    3. route: the route of the request.
+    2. operation: read/write operation.
 
     Note: ALWAYS call print() to report the result so that planner can get the result.
 
     Example: 
     >>> from intent_exec.agent.tool_functions_for_maintainer import query_prometheus
-    >>> promQL = 'rate(request_duration_seconds_count{name="catalogue",status_code=~"2..",route!="metrics"}[1m])'
+    >>> promQL = 'rate(request_duration_seconds_count{name="catalogue"}[1m])'
     >>> result = query_prometheus(promQL=promQL, duration='2m', step='1m')
     >>> print(result) # output the result so that planner can get it.
     [['2024-06-20 02:17:20', 0.0], ['2024-06-20 02:18:20', 0.0], ['2024-06-20 02:19:20', 0.0]]

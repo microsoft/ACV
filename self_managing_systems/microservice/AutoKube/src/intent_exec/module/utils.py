@@ -166,7 +166,6 @@ def save_yaml(yaml_fpath: str, data: dict):
         yaml.safe_dump(data, file, indent=2)
 
 def get_cluster_ip():
-    return "192.168.49.2"
     try:
         minikube_ip = subprocess.run(["minikube", "ip"], capture_output=True, text=True, check=True).stdout.strip()
     except subprocess.CalledProcessError:
