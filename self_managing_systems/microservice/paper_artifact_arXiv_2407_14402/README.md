@@ -1,5 +1,5 @@
 <h1 align="center">
-    <b>The Vision of Autonomic Computing: Can LLMs Make It a Reality?</b>
+    <b>Exploring the Potential of LLM-based Agents for Microservice Self-Management</b>
 </h1>
 
 <div align="center">
@@ -10,7 +10,9 @@
 
 </div>
 
-**ACV-LLM** is a multi-agent framework designed to achieve microservice self-management in line with [The Vision of Autonomic computing](https://ieeexplore.ieee.org/abstract/document/1160055).
+This folder provides the code artifact for the work of applying LLM-based agents to microservice self-management. More details can be found on the [paper website](https://aka.ms/ACV-LLM). 
+
+Following the instructions below, you can reproduce the experiment results of the paper based on the microservice demo project [Sock Shop](https://github.com/microservices-demo/microservices-demo). Moreover, you can also leverage this code for exploring the self-managing capabilities on your own microservice.
 
 <h1 align="center">
     <!-- <img src="assets/two-level-architecture.png" width=500/>  -->
@@ -27,9 +29,9 @@ Prerequisite: Linux System Environment, **[Docker](https://docs.docker.com/engin
 # conda create -n acv_llm python=3.11
 # conda activate acv_llm
 
-# clone the repo
+# clone the repo (or just download the code in this folder)
 git clone https://github.com/microsoft/ACV.git
-cd ACV/ACV-LLM
+cd self_managing_systems/microservice/paper_artifact_arXiv_2407_14402
 
 # check if prerequisites are installed
 bash scripts/check_prerequisites.sh
@@ -43,7 +45,7 @@ bash scripts/setup.sh
 ```
 
 ### Step 2: Configure the LLMs
-Before running ACV-LLM, you need configure your LLMs first, those configurations will be used by `ClusterMangaer` and `Maintainer`. You should create your own config file `conf/secret.yaml`, by copying `conf/secret_template.yaml` and edit endpoint config as follows:
+Before running the actual experiemnts, you need configure your LLMs first. Those configurations will be used by `ClusterMangaer` and `Maintainer`. You should create your own config file `conf/secret.yaml`, by copying `conf/secret_template.yaml` and edit endpoint config as follows:
 
 **OpenAI**
 ```yaml
@@ -73,10 +75,8 @@ Other:
   base_url: "http://localhost:1234" # The endpoint of your local API.
 ```
 
-### Step 3: Start ACV-LLM
-You can enjoy ACV-LLM now!
-
-Execute the following command to take a first look at how ACV-LLM working:
+### Step 3: Quick Trial
+Execute the following command for a quick trial:
 ```bash
 python -m src.empirical_low_level_L1_2 \
 --instance metric_collection_1 \
@@ -159,12 +159,6 @@ After you finish your task, you can tear down the environment by using the follo
 ```bash
 bash scripts/remove_project.sh
 ```
-
-## Todo List
-- [ ] Support more microservice demos.
-- [ ] Support other multi-agent frameworks to ACV-LLM.
-- [ ] Add a custom dashboard to manage the framework.
-- [ ] Implement the third working mechanism.
 
 ## Contributing
 
