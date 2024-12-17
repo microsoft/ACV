@@ -5,6 +5,9 @@
 
 This repository collects all our ongoing work towards achieving the Vision of Autonomic Computing (ACV).
 
+## News
+* [2024/12/17] We release the [code artifact](self_managing_systems/microservice/paper_artifact_arXiv_2407_14402/README.md) for the initial research exploration on applying [LLM-based agents for microservice self-management]((https://aka.ms/ACV-LLM)). 
+
 ## What is ACV?
 
 The Vision of Autonomic Computing is a vision of self-managing systems that can adapt to their environment and requirements. The vision, proposed in the early 2000s, emerged as a response to the growing complexity of managing computing systems. It has since become a long-standing goal in the field of computer science, highlighting the need for systems capable of self-management. The initial vision is based on four key properties: self-configuration, self-optimization, self-healing, and self-protection. These properties are designed to enable systems to manage themselves with minimal human intervention. For example, in cloud computing, a system utilizing these properties could automatically detect and recover from server failures, optimize resource allocation based on current demand, and defend against potential security threats without requiring manual oversight. More details can be found in the [ACV paper](https://ieeexplore.ieee.org/document/1160055) and the wikipedia page on [Autonomic Computing](https://en.wikipedia.org/wiki/Autonomic_computing).

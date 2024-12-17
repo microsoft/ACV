@@ -124,7 +124,7 @@ python -m src.empirical_high_level_L3_4_5 \
 
 **Note:** The above commands run an experiment with one of the test cases in `data/dataset` and store the chat history in `results/`. Other test cases can be found in the `data/dataset` folder.
 
-## Try our working machanisms
+## Try our working machanisms on your own tasks and microservices
 
 You can explore your own task in our environment. Here are some examples for you to have a try.
 
@@ -176,7 +176,7 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Citation
 
-If you use ACV-LLM in your research, please cite our paper:
+If you use this code in your research, please cite our paper:
 ```BibTex
 @misc{zhang2024visionautonomiccomputingllms,
       title={The Vision of Autonomic Computing: Can LLMs Make It a Reality?}, 
