@@ -6,7 +6,7 @@
 This repository collects all our ongoing work towards achieving the Vision of Autonomic Computing (ACV).
 
 ## News
-* [2024/12/17] We release the [code artifact](self_managing_systems/microservice/paper_artifact_arXiv_2407_14402/README.md) for the initial research exploration on applying [LLM-based agents for microservice self-management]((https://aka.ms/ACV-LLM)). 
+* [2024/12/17] We release the [code artifact](self_managing_systems/microservice/paper_artifact_arXiv_2407_14402/README.md) for the initial research exploration on applying [LLM-based agents for microservice self-management](https://aka.ms/ACV-LLM). 
 
 ## What is ACV?
 
