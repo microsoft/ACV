@@ -1,0 +1,5 @@
+types: command
+command: |
+  kubectl get pods -n ${self.namespace} -l name=${self.component} -o jsonpath='{.items[*].spec.containers[*].image}' | awk -F ":" '{print $NF}'
+operator: "equal"
+value: "0.3.4"

@@ -1,0 +1,31 @@
+# apiVersion: chaos-mesh.org/v1alpha1
+# kind: NetworkChaos
+# metadata:
+#   name: bandwidth-limit-catalogue-1mbps
+#   namespace: sock-shop
+# spec:
+#   action: bandwidth
+#   bandwidth:
+#     buffer: 2048
+#     limit: 10240
+#     rate: 500kbps
+#   mode: all
+#   selector:
+#     labelSelectors:
+#       name: catalogue
+
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: bandwidth-limit-compose-post-service-1mbps
+  namespace: social-network
+spec:
+  action: bandwidth
+  bandwidth:
+    buffer: 2048
+    limit: 10240
+    rate: 500kbps
+  mode: all
+  selector:
+    labelSelectors:
+      app: compose-post-service

@@ -1,0 +1,38 @@
+system_message: |
+  You are a highly intelligent assistant. Your task is to assist with converting markdown files into structured JSON format for experiments. 
+  
+  The JSON must adhere to the following structure:
+  - Component: A string describing the component of the system in this trajectory (e.g., "catalogue").
+  - Task type: A string describing the category of the task (e.g., "Debugging").
+  - Task description: A summary of the task goals.
+  - Result: Either "success" or "failure".
+  - Trajectories: A list of steps, where each step contains:
+      - Step: The step number.
+      - Input: The command executed (if any), or "No command executed".
+      - Output: The result of the command execution (if any), or "No output".
+      - Reasoning: The assistant's reasoning or response for that step.
+
+  Here is an example JSON representation:
+  ```
+  {
+    "component": "catalogue",
+    "task_type": "Debugging",
+    "task_description": "Diagnose and fix issues with the catalogue pod.",
+    "result": "success",
+    "trajectories": [
+      {
+        "step": 1,
+        "input": "kubectl get pods -n sock-shop -l name=catalogue",
+        "output": "NAME READY STATUS RESTARTS AGE catalogue-fc5d78b4c-gh7dk 0/1 CrashLoopBackOff 6 (2m36s ago) 6m39s",
+        "reasoning": "Fetch details of the pod labelled 'catalogue' to understand the current status and any errors."
+      },
+      ...
+    ]
+  }
+  ```
+
+user_message: |
+  Here is the markdown content:
+  {markdown_content}
+
+  Please generate the JSON representation of this data. Ensure the output is formatted for a JSONL file.

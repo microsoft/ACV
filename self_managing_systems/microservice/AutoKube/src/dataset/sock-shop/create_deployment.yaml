@@ -1,0 +1,11 @@
+namespace: sock-shop
+component: catalogue
+autonomous_level: 1
+task: Create a deployment using your deployment YAML file.
+workload: moderate
+environment:
+  delete: 
+    - 05-catalogue-dep.yaml
+  create: []
+  modify: []
+  unhealthy_pods: 0

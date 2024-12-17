@@ -1,0 +1,24 @@
+name: url-shorten-memcached
+
+ports:
+  - port: 11211
+    targetPort: 11211
+  - port: 9464
+    targetPort: 9464
+
+container:
+  image: library/memcached
+  imageVersion: 1.6.7
+  name: url-shorten-memcached
+  ports: 
+  - containerPort: 11211
+  - containerPort: 9464   # 添加9464端口映射
+
+configMaps:
+  - name: jaeger-config.yml
+    mountPath: /config/jaeger-config.yml
+    value: jaeger-config
+
+  - name: service-config.json
+    mountPath: /config/service-config.json
+    value: service-config

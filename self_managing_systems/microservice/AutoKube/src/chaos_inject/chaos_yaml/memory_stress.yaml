@@ -1,0 +1,14 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: stress-memory-catalogue-50
+  namespace: sock-shop
+spec:
+  mode: all
+  selector:
+    labelSelectors:
+      name: catalogue
+  stressors:
+    memory:
+      size: 150MB
+      workers: 2

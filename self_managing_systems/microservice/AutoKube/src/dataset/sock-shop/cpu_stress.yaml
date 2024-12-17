@@ -1,0 +1,20 @@
+namespace: sock-shop
+component: catalogue
+autonomous_level: 3
+workload: light
+environment:
+  delete: []
+  create: []
+  modify: []
+  unhealthy_pods: 0
+
+chaos:
+  type: StressChaos
+  name: stress-cpu-catalogue-50
+  selector:
+    labelSelectors:
+      name: catalogue
+  args:
+    cpu:
+      load: 50
+      workers: 2

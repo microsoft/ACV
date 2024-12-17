@@ -1,0 +1,66 @@
+name: media-frontend
+
+ports:
+  - port: 8081
+    targetPort: 8080
+  - port: 9464
+    targetPort: 9464
+
+container:
+  image: yg397/media-frontend
+  imageVersion: xenial
+  name: media-frontend
+  resources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  ports: 
+  - containerPort: 8081
+  - containerPort: 9464   # 添加9464端口映射
+  env:
+  - name: fqdn_suffix
+    value: ".{{ .Release.Namespace }}.svc.cluster.local"
+  volumeMounts:
+    - name: lua-scripts
+      mountPath: /usr/local/openresty/nginx/lua-scripts
+
+initContainer:
+  image: alpine/git
+  imageVersion: latest
+  name: alpine-container
+  volumeMounts:
+  - name: lua-scripts
+    mountPath: /lua-scripts
+  - name: pv-social-network
+    mountPath: /DeathStarBench
+  command: "/bin/sh" 
+  args: ["-c", "cp -r /DeathStarBench/socialNetwork/media-frontend/lua-scripts/* /lua-scripts/"]
+
+volumes:
+  - name: lua-scripts
+
+pvcs:
+  - name: pv-social-network
+    persistentVolumeClaim:
+      claimName: pvc-social-network
+
+# hostPath:
+#   - name: hp-social-network
+#     path: /home/docker/DeathStarBench
+#     type: Directory
+
+configMaps:
+  - name: nginx.conf
+    mountPath: /usr/local/openresty/nginx/conf/nginx.conf
+    value: nginx
+
+  - name: jaeger-config.yml
+    mountPath: /config/jaeger-config.yml
+    value: jaeger-config
+
+  - name: service-config.json
+    mountPath: /config/service-config.json
+    value: service-config

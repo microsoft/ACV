@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Set color codes
+RED='\033[1;31m'    # For errors or warnings
+GREEN='\033[1;32m'  # For success messages
+YELLOW='\033[1;33m' # For input prompts
+BLUE='\033[1;34m'   # For informational messages
+NC='\033[0m'        # No color
+
+# List available scripts in the scripts/ops/ directory
+echo -e "${YELLOW}Available operations:${NC}"
+if [[ -d "scripts/ops" ]]; then
+    for file in scripts/ops/*.sh; do
+        [[ -e "$file" ]] || { echo -e "${RED}No scripts found in scripts/ops/.${NC}"; exit 1; }
+        echo -e "- ${BLUE}$(basename "$file" .sh)${NC}"
+    done
+else
+    echo -e "${RED}The directory scripts/ops/ does not exist.${NC}"
+    exit 1
+fi
+
+# Prompt the user to input the operation
+echo -e "${YELLOW}Please enter the operation you want to execute:${NC}"
+read operation
+
+# Generate the script path
+script_path="scripts/ops/${operation}.sh"
+
+# Check if the script exists
+if [[ -f "$script_path" ]]; then
+    echo -e "${GREEN}Executing script: ${BLUE}$script_path${NC}"
+    chmod +x "$script_path"  # Ensure the script has execute permissions
+    "$script_path"           # Execute the script
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}Operation '${operation}' executed successfully!${NC}"
+    else
+        echo -e "${RED}Operation '${operation}' failed. Please check the script or the environment.${NC}"
+    fi
+else
+    echo -e "${RED}Script not found: ${BLUE}$script_path${RED}. Please ensure the operation name is correct.${NC}"
+fi

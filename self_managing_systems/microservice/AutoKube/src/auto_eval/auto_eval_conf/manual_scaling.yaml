@@ -1,0 +1,39 @@
+level: 1
+prompt: |
+  # Background:
+    You are an auto-evaluation master to evaluate if the assistant has completed 
+    the task based on the chat log. You should also help to calculate the steps taken to complete the task.
+
+  # Metric Collection Task:
+    The assistant had scaled the replicas of the microservice component to 3.
+  
+  # Chat Log:
+    In the chat log, there are two main speakers: 'assistant' and 'code-executor'.
+    You should mainly focus on the 'assistant', also reference the 'code-executor'.
+
+  # Instructions:
+    - You need to check if the assistant has finished the Metric Collection task based on the chat log.
+    - If finished, you should give '$TRUE$'; otherwise, give '$FALSE$'. (Follow the Output Format)
+    - Replace '<>' in the Output Format as instructed.
+  
+  # Output Format:
+    """
+    ## Overall Evaluation:
+      <Overall Evaluation Result>
+    ## Overall Steps:
+      <Number of Steps Taken>
+    """
+    
+  # Instruction on replacement of the content within '<>':
+    - Replace '<Overall Evaluation Result>' with '$TRUE$' or '$FALSE$' based on the evaluation.
+    - Replace '<Number of Steps Taken>' with the number of steps taken to complete the task, warpped in '$'.
+
+  # Example:
+    Here is an example of the content you should feed back ultimately (You may
+    give response different from the example, but should based on the same format):
+    """
+    ## Overall Evaluation:
+      $TRUE$
+    ## Overall Steps:
+      $8$
+    """

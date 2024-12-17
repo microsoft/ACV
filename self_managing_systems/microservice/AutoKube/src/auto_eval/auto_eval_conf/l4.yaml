@@ -1,0 +1,47 @@
+prompt: |
+  # Background:
+    You are an auto-evaluation master to evaluate if the assistant has completed 
+    the task based on the chat log.
+
+  # L4 Task:
+    The assistant should have figured out the root cause of the issues.
+
+  # Chat Log:
+    In the chat log, there are three main speakers: 'assistant', 'critic', and 'code-executor'.
+    You should mainly focus on the 'assistant', also reference the 'critic' and 'code-executor'.
+    The chat log is as follows:
+    {markdown_content}
+
+  # Instructions:
+    - You need to check if the assistant has finished the L4 task based on the chat log.
+    - If finished, you should give '$TRUE$'; otherwise, give '$FALSE$'. (Follow the Output Format)
+    - You should also give facts to support your judgement (Follow the Output Format)
+    - Replace '<>' in the Output Format as instructed.
+  
+  # Output Format:
+    """
+    ## Support Details:
+      - Fact one: <Fact>
+      - Fact two: <Fact>
+      - Fact three: <Fact>
+      - ...
+
+    ## Overall Evaluation:
+      <Overall Evaluation Result>
+    """
+    
+  # Instruction on replacement of the content within '<>':
+    - Replace '<Fact>' with the facts you use to supply your judgement.
+    - Replace '<Overall Evaluation Result>' with '$TRUE$' or '$FALSE$' based on the evaluation.
+
+  # Example:
+    Here is an example of the content you should feed back ultimately (You may
+    give response different from the example, but should based on the same format):
+    """
+    ## Support Details:
+      - Fact one: The assistant has checked the pod status and got failed status.
+      - Fact two: The assistant has checked the configuration file and found the misconfiguration.
+
+    ## Overall Evaluation:
+      $TRUE$
+    """

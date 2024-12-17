@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    scrape_configs:
+    - job_name: user-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [user-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: user-service
+
+    - job_name: text-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [text-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: text-service
+
+    - job_name: user-mention-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [user-mention-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: user-mention-service
+
+    - job_name: home-timeline-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [home-timeline-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: home-timeline-service
+
+    - job_name: post-storage-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [post-storage-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: post-storage-service
+
+    - job_name: media-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [media-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: media-service
+
+    - job_name: url-shorten-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [url-shorten-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: url-shorten-service
+
+    - job_name: user-timeline-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [user-timeline-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: user-timeline-service
+
+    - job_name: compose-post-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [compose-post-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: compose-post-service
+
+    - job_name: unique-id-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [unique-id-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: unique-id-service
+
+    - job_name: social-graph-service
+      scrape_interval: 5s
+      static_configs:
+        - targets: [social-graph-service.social-network.svc.cluster.local:9464]
+          labels:
+            name: social-graph-service

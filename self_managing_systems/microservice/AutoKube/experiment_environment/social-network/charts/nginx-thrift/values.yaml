@@ -1,0 +1,83 @@
+name: nginx-thrift
+
+ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30080
+  - port: 9464
+    targetPort: 9464
+
+container:
+  image: yg397/openresty-thrift
+  imageVersion: xenial
+  name: nginx-thrift
+  resources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  ports: 
+  - containerPort: 8080
+  - containerPort: 9464   # 添加9464端口映射
+  env:
+  - name: fqdn_suffix
+    value: ".{{ .Release.Namespace }}.svc.cluster.local"
+  volumeMounts:
+    - name: lua-scripts
+      mountPath: /usr/local/openresty/nginx/lua-scripts
+    - name: lua-thrift
+      mountPath: /usr/local/openresty/lualib/thrift
+    - name: pages
+      mountPath: /usr/local/openresty/nginx/pages
+    - name: gen-lua
+      mountPath: /gen-lua
+    - name: keys
+      mountPath: /keys
+
+
+initContainer:
+  image: alpine/git
+  imageVersion: latest
+  name: alpine-container
+  volumeMounts:
+  - name: lua-scripts
+    mountPath: /lua-scripts
+  - name: lua-thrift
+    mountPath: /lua-thrift
+  - name: pages
+    mountPath: /pages
+  - name: gen-lua
+    mountPath: /gen-lua
+  - name: keys
+    mountPath: /keys
+  - name: pv-social-network
+    mountPath: /DeathStarBench
+  command: "/bin/sh" 
+  args: ["-c", "cp -r /DeathStarBench/socialNetwork/gen-lua/* /gen-lua/ &&     
+            cp -r /DeathStarBench/socialNetwork/docker/openresty-thrift/lua-thrift/* /lua-thrift/ &&
+            cp -r /DeathStarBench/socialNetwork/nginx-web-server/lua-scripts/* /lua-scripts/ &&
+            cp -r /DeathStarBench/socialNetwork/nginx-web-server/pages/* /pages/ &&
+            cp /DeathStarBench/socialNetwork/keys/* /keys/ "]
+
+pvcs:
+  - name: pv-social-network
+    persistentVolumeClaim:
+      claimName: pvc-social-network
+
+volumes:
+  - name: lua-scripts
+  - name: pages
+  - name: gen-lua
+  - name: lua-thrift
+  - name: keys
+
+configMaps:
+  - name: jaeger-config.json
+    mountPath: /usr/local/openresty/nginx/jaeger-config.json
+    value: jaeger-config
+
+  - name: nginx.conf
+    mountPath: /usr/local/openresty/nginx/conf/nginx.conf 
+    value: nginx

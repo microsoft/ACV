@@ -1,0 +1,14 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: stress-home-timeline-service
+  namespace: social-network
+spec:
+  mode: all
+  selector:
+    labelSelectors:
+      app: home-timeline-service
+  stressors:
+    cpu:
+      load: 50
+      workers: 2
