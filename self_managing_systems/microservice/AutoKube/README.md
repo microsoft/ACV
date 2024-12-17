@@ -20,43 +20,44 @@
 
 This project is a work in progress, and contributions from the community are highly encouraged! Watch this [6-min introduction video](https://youtu.be/IFFLb5mgzY0) to learn more.
 
-AutoKube is inspired by research on applying LLM-based agents for microservice self-management. For more details, see [paper_artifact_arXiv_2407_14402](../paper_artifact_arXiv_2407_14402/README.md) for more details. 
+AutoKube is inspired by research on applying LLM-based agents for microservice self-management. For more details, see [paper_artifact_arXiv_2407_14402](../paper_artifact_arXiv_2407_14402/README.md).
 
 
 ## Dev: Setting up AutoKube for Your Microservice
 This section guides developers through setting up AutoKube for a microservice.
-### Setup Minikube
-Run the following script to set up a Minikube cluster. Follow the on-screen instructions during execution:
+### General Workflow
+
+#### 1. Set Up Your Microservice (Including Metric Collection)
+
+Create a local Kubernetes testbed with Minikube.
+
+---
+
+#### 2. Set Up the LLM-Based Agent
+
+Configure and deploy the LLM-based agent.
+
+---
+
+### Example Scenarios
+
+This repository provides two concrete examples (sock-shop, social-network) for demonstration:
+
+#### 1. Steps to Set Up the Microservice
+
 ```bash
-sh scripts/dev/minikube.sh
+sh scripts/dev/minikube.sh # Set up a local testbed using Minikube
+sh scripts/dev/prometheus.sh # Deploy Prometheus and forward its port for monitoring
+sh scripts/dev/service.sh # Deploy the example services (Sock-shop or Social-network)
 ```
 
-### Setup Prometheus Deployment
-Run the following script to deploy Prometheus and forward its port for metrics monitoring. Port forwarding is integrated into the script:
-```bash
-sh scripts/dev/prometheus.sh
-```
+---
 
-### Setup Services
-You can deploy example services using the script below. For custom services, refer to the code in src/exp_setup.
+#### 2. Set Up the LLM-Based Agents
 
 ```bash
-sh scripts/dev/service.sh
+sh scripts/dev/agent.sh # Deploy the LLM-based agents
 ```
-### (Optional) Setup Chaos-mesh
-To enable chaos injection, we provide a setup script that allows you to easily test various potential failure scenarios.
-
-```bash
-sh scripts/dev/chaos-mesh.sh 
-```
-
-### (Optional) Switch Cluster.
-You can swith to other clusters as you want.
-```bash
-kubectl config get-contexts
-kubectl config use-context <context-name>
-```
-
 
 ## Ops: Using AutoKube for Your Microservice
 For Ops, we provide an easy-to-use command-line tool, AutoKube. By following the instructions below, you can simplify the management of your microservices.

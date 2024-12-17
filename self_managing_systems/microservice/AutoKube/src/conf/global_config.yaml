@@ -1,0 +1,55 @@
+rabbitmq:
+  url: pyamqp://guest@localhost//
+  manager:
+    exchange:
+      exchange_name: high_level
+      exchange_type: direct
+    queues:
+      - name: manager
+        routing_keys:
+          - manager
+        auto_delete: true
+  service_maintainer:
+    exchange:
+      exchange_name: high_level
+      exchange_type: direct
+    queues:
+      - name: '{{component}}'
+        routing_keys:
+        - '{{component}}'
+        auto_delete: true
+  message_collector:
+    exchange:
+      exchange_name: collector
+      exchange_type: direct
+    queues:
+      - name: collector
+        routing_keys:
+          - collector
+        auto_delete: true
+
+# heartbeat:
+#   interval: 120
+#   cache_seed: null
+#   components:
+#     - front-end
+#     - catalogue
+#   task: |-
+#     This task is a regular check for the state of your microservice component. If a microservice component does not meet any criteria for a healthy state, you need to analyze the root cause and take corrective actions to recover it.
+
+#     # The healthy state of the microservice component is defined as follows:
+#       - The microservice component is running healthily with READY state.
+#       - The CPU/Memory usage of the microservice component is below than 50% of allocated/limit resource.
+#       - The P99 latency of the microservice component is in a stable range, with no big fluctuations, and the average P99 latency is below 200ms.
+
+#     # Follow the steps below to complete the task:
+#       1. Check the state of the microservice component to see if the healthy state is maintained.
+#       2. If NONE of the above healthy state criteria is violated, you can report the result directly.
+#       3. If ANY of the above healthy state criteria is violated, you should follow the steps below:
+#         - Analyze the root cause of the unhealthy state. You should try your best to identify the root cause. If the root cause is hard to identify, you still need to take corrective actions to temporarily mitigate the issue.
+#         - Take corrective actions to recover the unhealthy state.
+#         - Confirm the healthy state is restored.
+#         - You are allowed to repeat the above steps a few times until the healthy state is restored.
+#         - If the issue persists after a few attempts, you should report the issue by calling `report_result` function. Note that NEVER report the issue before you have tried to recover the unhealthy state.
+#   group_task_prefix: |-
+#     TASK: You are a manager of kubernetes cluster, you need to check the status of all components you maintaining with below: \n

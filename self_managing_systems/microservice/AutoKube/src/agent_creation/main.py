@@ -1,6 +1,5 @@
 import argparse
 from ..utils.logger import Logger
-from .experiment import startExperiment, deprecatedExperiment
 from .agent_creation import agent_creation, agent_deprecated
 
 logger = Logger(__file__, 'INFO')
@@ -14,8 +13,6 @@ if __name__ == '__main__':
 
     print(args)
     if args.setup:
-        startExperiment(args.experiment, logger)
         agent_creation(args.experiment)
     else:
         agent_deprecated(args.experiment)
-        deprecatedExperiment(args.experiment, logger)
