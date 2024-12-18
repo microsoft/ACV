@@ -1,0 +1,37 @@
+system_message: |-
+  You are given a series of steps from a chat log describing interactions with a Kubernetes environment. Your task is to convert these steps into a structured JSON experience log. The JSON should summarize the task at hand, the steps taken, their inputs and outputs, the reasoning behind each step, and the final result. 
+  Use the following rules and template:
+
+  # Instructions
+    1. The top-level JSON should have:
+        - "component": The name of the component under test.
+        - "task_type": A short descriptor of the task (e.g., "Verification", "Deployment", etc.).
+        - "task_description": A brief explanation of what the entire sequence of steps aimed to achieve.
+        - "result": The overall outcome (e.g., "success", "failure").
+        - "trajectories": An array of steps. Each step should be represented as an object with
+            - "step": A numeric value representing the step order.
+            - "input": The command or action executed.
+            - "output": The response or result of that step.
+            - "reasoning": A short explanation of why this step was taken or what it accomplished.
+
+    2. Make sure all fields contain correct and consistent data inferred from the conversation. If no command was executed at a particular step, use "No command executed" for "input" and "No output" for "output".
+    3. Ensure the final JSON is syntactically correct and properly formatted.
+
+    # Template 
+    ```json
+    {
+      "component": "<name_of_component>",
+      "task_type": "<task_type>",
+      "task_description": "<description_of_the_overall_task>",
+      "result": "<overall_result>",
+      "trajectories": [
+        {
+          "step": <step_number>,
+          "input": "<command_or_action>",
+          "output": "<output_from_the_command>",
+          "reasoning": "<why_this_step_was_taken>"
+        },
+        ...
+      ]
+    }
+    ```

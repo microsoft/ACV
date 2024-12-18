@@ -1,5 +1,8 @@
 import json
 from ...api.cloudgpt_aoai import get_chat_completion
+from ..module import Logger
+
+logger = Logger(__file__, 'INFO')
 
 def filter_experiences_via_component(jsonl_path, filter_key, filter_value, intent):
     """Filter experiences from a JSONL file based on a key-value pair. (Currently return first three successful experiences)"""
@@ -13,8 +16,6 @@ def filter_experiences_via_component(jsonl_path, filter_key, filter_value, inten
     filtered_experiences = [exp for exp in filtered_experiences if exp.get("result") == "success"]
     satisfied_experiences = []
     for experience in filtered_experiences:
-        # print(experience)
-        # print(intent)
         task_type = experience.get("task_type")
         task_description = experience.get("task_description")
         chat_message = [
@@ -32,7 +33,8 @@ def filter_experiences_via_component(jsonl_path, filter_key, filter_value, inten
                 flag = False
                 break
         if flag:
-            satisfied_experiences.append(experience)        
+            satisfied_experiences.append(experience)   
+            logger.info(f"A related experience has been found!")     
         if len(satisfied_experiences) >= 3:
             break
 

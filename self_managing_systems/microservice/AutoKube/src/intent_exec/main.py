@@ -163,12 +163,12 @@ if __name__ == '__main__':
         logger.warning(f'No manager log file found at {manager_log_path}')
     
 
-    # for agent in agents:
-    #     agent_log_path = os.path.join(result_dir, f'{agent.name}.md')
-    #     if os.path.exists(agent_log_path):
-    #         with open(agent_log_path, 'r') as file:
-    #             agent_log_content = file.read()
-    #             add_experience(agent_log_content)
-    #             logger.info(f'Experience added for agent {agent.name}')
-    #     else:
-    #         logger.warning(f'No log file found for agent {agent.name} at {agent_log_path}')
+    for agent in agents:
+        agent_log_path = os.path.join(result_dir, f'{agent.name}.md')
+        if os.path.exists(agent_log_path):
+            with open(agent_log_path, 'r') as file:
+                agent_log_content = file.read()
+                add_experience(cluster, agent_log_content)
+                logger.info(f'Experience added for agent {agent.name}')
+        else:
+            logger.warning(f'No log file found for agent {agent.name} at {agent_log_path}')

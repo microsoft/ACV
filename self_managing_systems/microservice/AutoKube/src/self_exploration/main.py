@@ -14,14 +14,14 @@ def load_prompt_from_yaml(yaml_path, markdown_content):
 
 import os
 
-def add_experience(markdown_text, yaml_path="prompts/generate_mem.yaml"):
+def add_experience(namespace, markdown_text, yaml_path="prompts/generate_mem.yaml"):
     yaml_path = os.path.join(os.path.dirname(__file__), yaml_path)
     # Load system and user messages
     system_message, user_message = load_prompt_from_yaml(yaml_path, markdown_text)
 
     chat_message = [
         {"role": "system", "content": system_message},
-        {"role": "user", "content": "The chatlog is as follows:"},
+        {"role": "user", "content": "Now, given the following chat log:"},
         {"role": "user", "content": user_message}
     ]
     engine = "gpt-4-turbo-20240409"
@@ -32,10 +32,9 @@ def add_experience(markdown_text, yaml_path="prompts/generate_mem.yaml"):
 
     json_output = json_output[json_output.find("{"):json_output.rfind("}")+1]
     parsed_json = json.loads(json_output)
-    # print(parsed_json)
 
     # Save to a JSONL file
-    with open("src/self_exploration/experience_bank/sock-shop.jsonl", "a") as jsonl_file:
+    with open(f"src/self_exploration/experience_bank/{namespace}.jsonl", "a") as jsonl_file:
         jsonl_file.write(json.dumps(parsed_json) + "\n")
     
     print("Memories added successfully!")
