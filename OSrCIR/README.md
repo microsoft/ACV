@@ -1,13 +1,13 @@
 <div align="center">
 	
 # Reason-before-Retrieve: One-Stage Reflective Chain-of-Thoughts for Training-Free Zero-Shot Composed Image Retrieval (CVPR 2025)
+
+[![Author-Maintained](https://img.shields.io/badge/Maintained%20by-Original%20Author-blue)](https://github.com/Pter61)
+[![Academic Version](https://img.shields.io/badge/Research-Implementation-orange)](mailto:tangyuanmin@iie.ac.cn)
+[![Community Support](https://img.shields.io/badge/Community_QA-Active-brightgreen)](https://github.com/Pter61/osrcir/issues)
 [![arXiv](https://img.shields.io/badge/arXiv-Context-I2W.svg?logo=arXiv)](https://arxiv.org/pdf/2412.11077)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 [![GitHub Stars](https://img.shields.io/github/stars/Pter61/osrcir2024?style=social)](https://github.com/Pter61/osrcir2024)
 
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/reason-before-retrieve-one-stage-reflective/zero-shot-composed-image-retrieval-zs-cir-on-1)](https://paperswithcode.com/sota/zero-shot-composed-image-retrieval-zs-cir-on-1?p=reason-before-retrieve-one-stage-reflective) <br/>
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/reason-before-retrieve-one-stage-reflective/zero-shot-composed-image-retrieval-zs-cir-on-2)](https://paperswithcode.com/sota/zero-shot-composed-image-retrieval-zs-cir-on-2?p=reason-before-retrieve-one-stage-reflective) <br/>
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/reason-before-retrieve-one-stage-reflective/zero-shot-composed-image-retrieval-zs-cir-on)](https://paperswithcode.com/sota/zero-shot-composed-image-retrieval-zs-cir-on?p=reason-before-retrieve-one-stage-reflective) 
 </div>
 
 
@@ -32,11 +32,22 @@
 
 🔜 Full release after the official publication
 
-## Stay Updated
-Watch or star this repository to get notified about the release.
 
-## Contact
-For questions or collaboration inquiries, reach out via tangyuanmin@iie.ac.cn.
+## Contact & Collaboration
+
+**I warmly welcome academic discussions and research partnerships!**  
+
+| Platform       | Contact Method                                                                                                                                 |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Academic**   | 📧 [tangyuanmin@iie.ac.cn](mailto:tangyuanmin@iie.ac.cn)                                     |
+| **Code**       | 💻 [GitHub Profile](https://github.com/Pter61) • 🚀 [OSrCIR Project](https://github.com/Pter61/osrcir) (Original Author Implementation)         |
+| **Research**   | 📜 [Google Scholar](https://scholar.google.com.hk/citations?user=gPohD_kAAAAJ&hl=zh-CN)                                                      |
+
+### 🤝 Collaboration Preferences
+- 🔍 **Research Students**: Open to supervising interesting extensions of this work  
+- 🏢 **Industry Partners**: Available for applied research consulting (2-month minimum engagement)  
+- 🐛 **Community Support**: Please first check [Active Issues](https://github.com/Pter61/osrcir/issues) before emailing  
+
 
 ## Citing
 
