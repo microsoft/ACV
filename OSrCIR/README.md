@@ -1,10 +1,10 @@
 <div align="center">
 	
-# Reason-before-Retrieve: One-Stage Reflective Chain-of-Thoughts for Training-Free Zero-Shot Composed Image Retrieval (CVPR 2025)
+# Reason-before-Retrieve: One-Stage Reflective Chain-of-Thoughts for Training-Free Zero-Shot Composed Image Retrieval
 
 [![Author-Maintained](https://img.shields.io/badge/Maintained%20by-Original%20Author-blue)](https://github.com/Pter61)
 [![Community Support](https://img.shields.io/badge/Community_QA-Active-brightgreen)](https://github.com/Pter61/osrcir/issues)
-[![arXiv](https://img.shields.io/badge/arXiv-Context-I2W.svg?logo=arXiv)](https://arxiv.org/pdf/2412.11077)
+[![arXiv](https://img.shields.io/badge/arXiv-2412.11077-b31b1b.svg)](https://arxiv.org/abs/2412.11077)
 [![GitHub Stars](https://img.shields.io/github/stars/Pter61/osrcir2024?style=social)](https://github.com/Pter61/osrcir2024)
 
 </div>
@@ -71,7 +71,7 @@ Achieves **1.80-6.44%** performance gains over existing training-free methods ac
 - 🐛 **Community Support**: Please first check [Active Issues](https://github.com/Pter61/osrcir/issues) before emailing  
 
 
-## Citing
+## 📝 Citing
 
 If you found this repository useful, please consider citing:
 
