@@ -1,0 +1,92 @@
+To: alex.marketing@tritondefense.com
+Subject: Marketing–IT Project: Consolidated Specs, Requirements & Timeline
+Date: 7f8220c7-91fd-4a80-8129-4aa2eacf8f48
+Message-ID: <2ad22f44-0f40-40d3-b001-33f4b59db332@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Alex,
+
+As promised, I’ve pulled together everything we have on the Marketing–IT cross-departmental initiative so you have a single reference point.
+
+──────────────────────
+1. Project Overview
+──────────────────────
+• Goal: Build an integrated campaign-performance dashboard that pulls data from Salesforce, HubSpot, and the internal data lake, then surfaces near-real-time KPIs to Marketing while respecting DoD-grade security requirements.
+• Scope: Back-end micro-service, API gateway, secured S3 bucket for raw logs, Redshift analytics layer, React front-end embed for Marketing’s CMS.
+
+──────────────────────
+2. Functional Requirements (v2.3)
+──────────────────────
+• Ingest ≥ 200k events/min with 99.9% uptime.
+• Data freshness ≤ 10 min end-to-end.
+• Role-based access (Public, Analyst, Admin) mapped to Okta groups.
+• Export to .csv and .xlsx; scheduled PDF email digests.
+• Drill-down from campaign → ad set → creative with pivot metrics (CTR, CPC, CVR, ROAS).
+
+──────────────────────
+3. Technical Specifications
+──────────────────────
+Infrastructure
+  – VPC-isolated EKS cluster (3 × t3.large workers; autoscale to 10)
+  – Aurora-Postgres for metadata; Redshift RA3 for aggregates
+  – S3 (GovCloud) for raw + processed files (AES-256 server-side)
+  – CloudFront + WAF v2 for front-end delivery
+
+APIs & Data
+  – REST + GraphQL behind Kong gateway (mTLS + JWT)
+  – CDC ingestion using Debezium/Kafka → Kinesis Firehose →  S3/Redshift
+  – Scheduled pulls from Salesforce Bulk v2 + HubSpot v3 every 15 min
+
+Security & Compliance
+  – FIPS 140-2 encryption in transit and at rest
+  – STIG-hardened AMIs, CIS Lvl 2 baseline, weekly Nessus scans
+  – Audit log retention: 1 yr hot, 5 yrs cold (Glacier)
+  – All changes via Terraform with PR-based approvals
+
+CI/CD
+  – GitLab pipelines: static code scan (Snyk), container scan (Trivy), DAST (OWASP-ZAP)
+  – Blue/Green deploy with Argo Rollouts; max unavailable = 0
+
+──────────────────────
+4. Dependencies & Assumptions
+──────────────────────
+• Marketing supplies final dashboard designs by 22 Feb.
+• IT Security approves WAF ruleset changes within 2 business days.
+• Data Governance signs off on PII masking spec before UAT.
+
+──────────────────────
+5. Deliverables
+──────────────────────
+1) Terraform/IaC repo
+2) Kubernetes Helm charts
+3) API reference (OpenAPI 3.1)
+4) User guide + FAQ (Markdown)
+5) Training deck (PowerPoint)
+
+──────────────────────
+6. Timeline & Milestones
+──────────────────────
+Phase 0  | Discovery & requirements         | 10 Jan – 21 Jan ✔
+Phase 1  | Prototype ingestion pipeline      | 01 Feb – 28 Feb ✔
+Phase 2  | Full data-model & API integration | 01 Mar – 25 Mar (in-progress)
+Phase 3  | UAT + performance hardening       | 01 Apr – 15 Apr
+Phase 4  | Production launch                 | 22 Apr
+
+──────────────────────
+7. Stakeholders
+──────────────────────
+• IT: Me, Chris (DevOps), Priya (Security)  
+• Marketing: You, Sarah (Analytics)  
+• Exec Sponsor: Mr. Thompson
+
+──────────────────────
+Access to Docs & Code
+──────────────────────
+All source material lives in the shared Google Drive folder “/Cross-Dept-Dashboard/”. You already have view + comment access.  Let me know if anything is missing or if you prefer a zipped bundle—I can push one to your SFTP drop.
+
+Hope this gives you everything you need. Happy to jump on a quick call if you’d like to walk through any of it.
+
+Thanks,
+Jane
+IT Administrator | Triton Defense Solutions
+

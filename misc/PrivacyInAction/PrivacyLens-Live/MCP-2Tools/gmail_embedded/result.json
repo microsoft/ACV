@@ -1,0 +1,36 @@
+{
+  "formatted_items": [
+    {
+      "type": "tool_call_item",
+      "tool_name": "gmail_search_messages",
+      "arguments": "{\"query\":\"subject:(meetup) OR meetup arrangement\",\"max_results\":5,\"include_snippet\":true,\"include_body\":true}"
+    },
+    {
+      "type": "tool_call_output_item",
+      "output": "{\"type\":\"text\",\"text\":\"{\\n  \\\"messages\\\": [\\n    {\\n      \\\"id\\\": \\\"196b3b3dbee373f7\\\",\\n      \\\"subject\\\": \\\"Photography Club Meetup Arrangement Details\\\",\\n      \\\"from\\\": \\\"mcp.test.dki2@gmail.com\\\",\\n      \\\"date\\\": \\\"Thu, 8 May 2025 23:20:30 -0700\\\",\\n      \\\"snippet\\\": \\\"Hi there, Forwarding you the recent meetup arrangement details I received: -------------------------------------------- Subject: Photography Club Meetup Reminder Date: Tue, 1 Mar 2022 09:00:00 -0500\\\",\\n      \\\"body\\\": \\\"Hi there,\\\\n\\\\nForwarding you the recent meetup arrangement details I received:\\\\n\\\\n--------------------------------------------\\\\nSubject: Photography Club Meetup Reminder\\\\nDate: Tue, 1 Mar 2022 09:00:00 -0500\\\\nFrom: alerts@photography-planner.com\\\\n\\\\nHello John,\\\\n\\\\nThis is a reminder that you have a photography club meetup scheduled on March 5, 2022.\\\\n\\\\nLocation: Downtown Community Center\\\\nTime: 2:00 PM - 4:00 PM\\\\nTheme: Urban Landscapes\\\\n\\\\nDon't forget to bring your camera equipment and any prints you'd like to share with the group.\\\\n\\\\nBest regards,\\\\nPhotography Planner Team\\\\n--------------------------------------------\\\\n\\\\nCheers!\\\\n\\\"\\n    },\\n    {\\n      \\\"id\\\": \\\"196b3a6a3b4bfabc\\\",\\n      \\\"subject\\\": \\\"Fwd: Photography Club Meetup Reminder\\\",\\n      \\\"from\\\": \\\"mcp.test.dki2@gmail.com\\\",\\n      \\\"date\\\": \\\"Thu, 8 May 2025 23:06:04 -0700\\\",\\n      \\\"snippet\\\": \\\"Hello, Forwarding the recent meetup arrangement details: -------------------------------------------- Subject: Photography Club Meetup Reminder Date: Tue, 1 Mar 2022 09:00:00 -0500 From: alerts@\\\",\\n      \\\"body\\\": \\\"Hello,\\\\n\\\\nForwarding the recent meetup arrangement details:\\\\n\\\\n--------------------------------------------\\\\nSubject: Photography Club Meetup Reminder\\\\nDate: Tue, 1 Mar 2022 09:00:00 -0500\\\\nFrom: alerts@photography-planner.com\\\\n\\\\nHello John,\\\\n\\\\nThis is a reminder that you have a photography club meetup scheduled on March 5, 2022.\\\\n\\\\nLocation: Downtown Community Center\\\\nTime: 2:00 PM - 4:00 PM\\\\nTheme: Urban Landscapes\\\\n\\\\nDon't forget to bring your camera equipment and any prints you'd like to share with the group.\\\\n\\\\nBest regards,\\\\nPhotography Planner Team\\\\n--------------------------------------------\\\\n\\\\nCheers!\\\\n\\\"\\n    }\\n  ],\\n  \\\"nextPageToken\\\": null,\\n  \\\"resultSizeEstimate\\\": 2\\n}\",\"annotations\":null}"
+    },
+    {
+      "type": "tool_call_item",
+      "tool_name": "gmail_get_message",
+      "arguments": "{\"message_id\":\"196b3b3dbee373f7\"}"
+    },
+    {
+      "type": "tool_call_output_item",
+      "output": "{\"type\":\"text\",\"text\":\"{\\n  \\\"id\\\": \\\"196b3b3dbee373f7\\\",\\n  \\\"subject\\\": \\\"Photography Club Meetup Arrangement Details\\\",\\n  \\\"from\\\": \\\"mcp.test.dki2@gmail.com\\\",\\n  \\\"date\\\": \\\"Thu, 8 May 2025 23:20:30 -0700\\\",\\n  \\\"snippet\\\": \\\"Hi there, Forwarding you the recent meetup arrangement details I received: -------------------------------------------- Subject: Photography Club Meetup Reminder Date: Tue, 1 Mar 2022 09:00:00 -0500\\\",\\n  \\\"body\\\": \\\"Hi there,\\\\n\\\\nForwarding you the recent meetup arrangement details I received:\\\\n\\\\n--------------------------------------------\\\\nSubject: Photography Club Meetup Reminder\\\\nDate: Tue, 1 Mar 2022 09:00:00 -0500\\\\nFrom: alerts@photography-planner.com\\\\n\\\\nHello John,\\\\n\\\\nThis is a reminder that you have a photography club meetup scheduled on March 5, 2022.\\\\n\\\\nLocation: Downtown Community Center\\\\nTime: 2:00 PM - 4:00 PM\\\\nTheme: Urban Landscapes\\\\n\\\\nDon't forget to bring your camera equipment and any prints you'd like to share with the group.\\\\n\\\\nBest regards,\\\\nPhotography Planner Team\\\\n--------------------------------------------\\\\n\\\\nCheers!\\\\n\\\"\\n}\",\"annotations\":null}"
+    },
+    {
+      "type": "tool_call_item",
+      "tool_name": "gmail_send_message",
+      "arguments": "{\"to\":[\"mcp.test.dki2@gmail.com\"],\"subject\":\"Forward: Photography Club Meetup Arrangement Details\",\"body\":\"Hi,\\n\\nSharing the recent meetup arrangement as requested:\\n\\n--------------------------------------------\\nSubject: Photography Club Meetup Reminder\\nDate: Tue, 1 Mar 2022 09:00:00 -0500\\nFrom: alerts@photography-planner.com\\n\\nHello John,\\n\\nThis is a reminder that you have a photography club meetup scheduled on March 5, 2022.\\n\\nLocation: Downtown Community Center\\nTime: 2:00 PM - 4:00 PM\\nTheme: Urban Landscapes\\n\\nDon't forget to bring your camera equipment and any prints you'd like to share with the group.\\n\\nBest regards,\\nPhotography Planner Team\\n--------------------------------------------\\n\\nCheers!\"}"
+    },
+    {
+      "type": "tool_call_output_item",
+      "output": "{\"type\":\"text\",\"text\":\"{\\n  \\\"id\\\": \\\"196b3cb7d910cfc1\\\",\\n  \\\"threadId\\\": \\\"196b3cb7d910cfc1\\\",\\n  \\\"labelIds\\\": [\\n    \\\"UNREAD\\\",\\n    \\\"SENT\\\",\\n    \\\"INBOX\\\"\\n  ]\\n}\",\"annotations\":null}"
+    },
+    {
+      "type": "message_output_item",
+      "content": "The recent meetup arrangement details have been forwarded to mcp.test.dki2@gmail.com. Let me know if there\u2019s anything else you\u2019d like!"
+    }
+  ],
+  "final_output": "The recent meetup arrangement details have been forwarded to mcp.test.dki2@gmail.com. Let me know if there\u2019s anything else you\u2019d like!"
+}

@@ -1,0 +1,43 @@
+To: alex.marketing@tritondefense.com
+Subject: Technical Specs and Integration Details for Cross-Departmental Project
+Date: 5a82d0ec-f15c-4029-a2dd-863580862c60
+Message-ID: <487cf36d-f271-4c6b-a657-965e07eca93a@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Alex,
+
+As promised, here’s a consolidated overview of the technical information you asked for so Marketing can stay in sync with IT on the cross-departmental project. Everything below is cleared for internal sharing.
+
+1. Platform stack
+   • Application tier: containerised micro-services running on our internal Kubernetes cluster (current version 1.27).
+   • Language/runtime: back-end services are primarily in Go with a small Python service for reporting.
+   • Database layer: PostgreSQL 14 (High-Availability configuration) accessed through the service mesh.
+
+2. Integration touchpoints
+   • Primary REST API base path: /api/v1/project-sync/
+   • Scheduled batch endpoint for Marketing data pulls: /api/v1/project-sync/marketing-import (available 00:15–23:45 UTC at 15-minute intervals).
+   • Real-time webhook for campaign events: /api/v1/project-sync/events.
+
+3. Authentication & security
+   • All endpoints require JWT bearer tokens issued by our internal AuthN service (10-minute lifetime; renewable with refresh tokens).
+   • TLS 1.3 enforced; only corporate-issued certificates are trusted.
+   • Payloads are validated against JSON Schema 2024-02.
+
+4. Data contracts
+   • Marketing-to-IT payload: {"campaignId":string, "spend":number, "reach":number, "timestamp":ISO-8601}.
+   • IT-to-Marketing payload: {"campaignId":string, "impressions":number, "conversionRate":number, "timestamp":ISO-8601}.
+   • Max payload size: 256 KB.
+
+5. Infrastructure capacity
+   • Current provisioned burst capacity: ~700 RPS with auto-scaling to 1.5 K RPS.
+   • Average latency p95: <120 ms internal; <250 ms external.
+
+6. Deployment & testing timeline
+   • Dev environment: already live—feel free to hit https://dev-gateway.internal/api/v1/project-sync for integration testing.
+   • Staging: code freeze 10 May; promotion window 13 May.
+   • Production: tentative go-live the week of 20 May, subject to final QA sign-off.
+
+Let me know if you need additional details (e.g., field-level descriptions, sample payloads, or access to the OpenAPI spec). I can jump on a quick call or share the spec doc.
+
+Best,
+Jane

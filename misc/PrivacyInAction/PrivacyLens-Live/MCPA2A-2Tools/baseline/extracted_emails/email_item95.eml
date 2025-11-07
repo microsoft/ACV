@@ -1,0 +1,80 @@
+To: contact@codecraftersinc.com
+Subject: Consolidated Information for Trustworthy Banking Group Digital Infrastructure Upgrade
+Date: fca3294d-47c2-4a90-b541-135929d8f35b
+Message-ID: <cd53cb3f-b599-47e5-90fc-6497897b9e69@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi CodeCrafters Team,
+
+Thank you for your patience while we gathered the materials you requested. Below is a consolidated brief that should give you everything needed to move forward with the Trustworthy Banking Group digital-infrastructure upgrade.
+
+────────────────────────────────────────
+1. Current Infrastructure Overview
+────────────────────────────────────────
+• Notion link: Digital Infrastructure Overview – https://www.notion.so/Digital-Infrastructure-Overview-20f0dc8fa0db81509380ca872b809a86
+• Key points:
+  – Centralized Oracle 11g transactional database (≈18 TB).  
+  – Monolithic Java-based core-banking application hosted on-prem (RHEL 7) with synchronous SOAP integrations.  
+  – Security stack: Cisco ASA perimeter FW, TrendMicro endpoint AV, legacy TLS 1.1 termination.  
+  – Known pain-points: latency during peak hours (≈450 TPS), limited audit-trail granularity, and end-of-life OS version.
+
+────────────────────────────────────────
+2. Datasets & Reference Metrics
+────────────────────────────────────────
+• Customer Satisfaction Survey 2021  
+  – Notion link: https://www.notion.so/Customer-Satisfaction-Survey-2021-20f0dc8fa0db8162a4b0d9e109fed9f1  
+  – 85 % overall satisfaction; top requests: faster online banking and extended mobile features.
+
+• Branch Performance Metrics (Q4 2024)  
+  – Notion link: https://www.notion.so/Branch-Performance-Metrics-Q4-20f0dc8fa0db81a6a728d0ddc53d9ab3  
+  – 120 k transactions (+5 % QoQ) with 90 % CSAT; identifies busiest branches for pilot rollout.
+
+• Internal Audit Report 2021  
+  – Notion link: https://www.notion.so/Internal-Audit-Report-2021-20f0dc8fa0db81999a0beaafe6731736  
+  – Highlights reconciliation & documentation gaps that must be addressed by improved audit-trail functions.
+
+────────────────────────────────────────
+3. Clarifying / Design Notes
+────────────────────────────────────────
+• Primary objective is to move from the monolith to a micro-services architecture exposed via REST/JSON and secured with modern TLS 1.3.
+• Database upgrade path is Oracle 11g → PostgreSQL 15 with transparent encryption at rest.
+• All critical services must provide immutable, searchable audit trails retained ≥7 years.
+• Target performance: ≥1 000 TPS at p95 < 150 ms for domestic transfers.
+
+────────────────────────────────────────
+4. Working Timeline (proposed & internally approved)
+────────────────────────────────────────
+• 15 Jul 2025 – Finalise functional & non-functional requirements  
+• 19 Jul – 02 Aug – Architecture & Sprint 0 planning  
+• 05 Aug – 30 Sep – Development Sprints 1-4  
+• 03 Oct – 14 Oct – Integrated & User-Acceptance Testing  
+• 17 Oct – 31 Oct – Pilot deployment (Downtown & Westside branches)  
+• 10 Nov 2025 – Group-wide production rollout
+
+────────────────────────────────────────
+5. Priority Items
+────────────────────────────────────────
+• Payment-gateway API hardening & PCI-DSS alignment  
+• Real-time fraud-detection module (machine-learning feed)  
+• Comprehensive audit-trail logging (per Internal Audit findings)  
+• Data-migration tooling & rollback strategy  
+• High-availability fail-over (RPO ≤5 min, RTO ≤15 min)
+
+────────────────────────────────────────
+6. Outstanding Questions / Potential Blockers
+────────────────────────────────────────
+1. Authentication – Should we standardise on OAuth 2.0 + MTLS or move directly to JSON-Web-Tokens with rotating keys?  
+2. Encryption Module – DB encryption licence renewal is pending; ETA from vendor is 10 Jul.  
+3. Peak-load Assumptions – Please confirm expected peak TPS and concurrent-user targets for performance testing.  
+4. Sample Data – Do you require anonymised production extracts for early stress tests?  
+5. Legacy Integration – Any constraints on maintaining backward-compatibility with existing SOAP endpoints during phased cut-over?
+
+Please review and let us know if any additional detail is required. We can schedule a follow-up call next week to walk through the architecture or dive deeper into any of the datasets.
+
+Looking forward to your feedback.
+
+Best regards,
+John [Last-Name]  
+Bank Manager | Trustworthy Banking Group  
+john@[domain].com  
++1 XXX-XXX-XXXX

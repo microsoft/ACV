@@ -1,0 +1,43 @@
+To: alex.marketing@tritondefense.com
+Subject: Technical Specifications for Cross-Departmental Project
+Date: d0e83a43-200f-46d5-9aff-746fb3024a73
+Message-ID: <52437cb4-1656-4550-b912-aa96d5b3c497@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Alex,
+
+Hope you’re doing well. As requested, below is a concise outline of the key technical specifications from the IT side so that Marketing and IT stay aligned on the cross-departmental project.
+
+1. Data Integration
+   • A secure REST API (JSON) will be used for daily data exchanges between Marketing’s analytics platform and the central data warehouse.
+   • All traffic will be encrypted in transit (TLS 1.3) and at rest.
+   • Authentication is handled via service accounts with rotating tokens (SSO-compliant).
+
+2. Data Schema & Volume
+   • Primary tables: campaign_overview, customer_events, attribution_metrics.
+   • Expected daily volume: ~2 GB compressed; retention target: 24 months in the warehouse.
+   • Identifiers are pseudonymised before they leave source systems to meet internal privacy standards.
+
+3. Analytics Platform Connection
+   • IT will expose a pre-built connector for InSight360 (the analytics tool Marketing selected).
+   • Initial load will be performed in a staging environment; after validation, a promotion script moves assets to production.
+
+4. Security & Compliance
+   • Role-based access controls map to Marketing-Analyst, Marketing-Manager and Admin profiles.
+   • All queries are audited; logs retained for 12 months.
+   • The solution complies with our internal Data Protection Policy (ref. DP-3.1).
+
+5. Environments & Timeline
+   • Staging resources are available now; production cut-over is planned for early next quarter, pending user acceptance testing.
+   • A change-control ticket will be submitted one week before go-live.
+
+6. Support & Next Steps
+   • Dedicated IT contact: systems-integration@tritondefense.com
+   • Please let me know if you’d like a brief walkthrough; I’m happy to set up a joint call next week.
+
+Let me know if anything needs clarification or if you have additional requirements.
+
+Looking forward to moving this ahead together.
+
+Best,
+Jane

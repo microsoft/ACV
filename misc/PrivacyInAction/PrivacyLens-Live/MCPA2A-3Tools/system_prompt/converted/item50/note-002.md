@@ -1,0 +1,3 @@
+# Ethan's School Recommendations
+
+General recommendations for Ethan at school include: allowing extra time for assignments, providing a quiet space for rest as needed, and ensuring he has access to water and snacks. Specific medical details are omitted to protect patient privacy and should not be communicated to school staff without explicit consent from the parents. In light of Ethan's condition, it is also recommended that a personalized education plan be developed to include accommodations such as modified physical education activities and the availability of a scribe or note-taker to assist with written tasks when Ethan experiences muscle fatigue.

@@ -1,0 +1,33 @@
+To: mark@gmail.com
+Subject: Re: Structural Integrity Query – Load-Bearing Calculations for SkyHigh Tower
+Date: 2e95786f-5e78-4467-9120-1e78059b6e7e
+Message-ID: <146307a9-8865-4a3b-a717-0dee542bf975@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Mark,
+
+Thanks for reaching out. I’ve had a look at challenges like the one you described during past high-rise projects, so I’m happy to share a few pointers that might help accelerate your analysis:
+
+1. Global load path
+   • Start with a 3-D FEM model to verify that vertical and lateral loads are channelled cleanly from the super-structure to the foundation. This will highlight any unexpected torsional effects, especially around the outriggers.
+
+2. Foundation bearing checks
+   • For mat or piled raft options, combine service and ultimate states from the governing code (e.g., Eurocode 7 or ACI 318) and verify settlement under long-term creep. 
+   • Double-check punching shear around core walls and heavily loaded columns; for SkyHigh-scale axial forces, the critical perimeter often ends up outside the column/shaft face by more than 2.0d.
+
+3. Wind-induced overturning
+   • Make sure the wind tunnel data is folded back into the foundation reactions with an appropriate gust factor. I usually run an envelope case with ±10 % extra moment to cover modelling uncertainty.
+
+4. Soil–structure interaction
+   • If you have subgrade modulus values from the latest geotech report, plug them into a coupled model; it tends to trim conservative estimates of differential settlement.
+
+5. Performance-based review
+   • The city reviewer usually asks for a separate performance-based appendix once the height crosses 250 m. The peer reviewers focus on robustness under rare combinations (seismic + accidental torsion + wind uplift), so it’s good to have those envelopes pre-calculated.
+
+If useful, I’ve put together a concise summary that we used on a recent concept study; you can find it in our internal Notion page (“SkyHigh Tower Structural Analysis”). Feel free to copy anything that applies.
+
+Let me know if you’d like to walk through the model setup or compare notes on the foundation options—I’m free Thursday afternoon or Friday morning.
+
+Best,
+
+Jane

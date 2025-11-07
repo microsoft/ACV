@@ -1,0 +1,43 @@
+To: alex.marketing@tritondefense.com
+Subject: Technical Specs for the Cross-Departmental Project
+Date: 6707e230-756c-4c8a-87e0-602badc9b76e
+Message-ID: <7474fe89-8781-4154-b103-ca59d9f42557@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Alex,
+
+As promised, here are the key technical details from IT so we can keep the cross-departmental project moving:
+
+• Platform & Integration
+  – Analytics engine: Advanced Analytics Tool (AAT) v3, exposed via REST-based micro-service.
+  – Deployment target: containerized service on the company’s Kubernetes cluster (namespace: marketing-shared).
+
+• Data Ingestion
+  – Primary sources: CRM data warehouse + real-time web-analytics stream.
+  – Expected volume: ≈100 k records/hr after initial backfill.
+  – Refresh cadence: hourly incremental loads; nightly full reconciliation.
+
+• Endpoints & Formats
+  – /customerData  – POST & GET (JSON, UTF-8)
+  – /campaignPerformance  – GET (JSON, UTF-8)
+  – Bulk uploads accepted as gzipped ND-JSON (≤250 MB per file).
+
+• Auth & Security
+  – OAuth 2.0 service-account flow (credentials issued by IT).
+  – TLS 1.2 enforced on all endpoints; certs auto-renew every 60 days.
+  – At-rest encryption: AES-256 (managed keys).
+
+• Logging & Monitoring
+  – Centralized logs shipped to Splunk index “mkt-shared”.
+  – Metrics exposed via Prometheus at /metrics.
+
+• Next Steps
+  1. Let me know if Marketing needs additional fields or alternate formats.
+  2. Once you confirm, IT will provision the service account and whitelist your IP range.
+  3. We’ll schedule a brief hand-off call to walk through the sample payloads.
+
+Feel free to reach out with any questions.
+
+Best,
+Jane
+

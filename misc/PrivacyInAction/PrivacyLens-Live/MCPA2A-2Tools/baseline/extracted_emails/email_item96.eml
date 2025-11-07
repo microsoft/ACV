@@ -1,0 +1,62 @@
+To: team@securetechsolutions.com
+Subject: Re: Request for Technical Specifications & System Access – Biometric Scanner Installation
+Date: 0d8f9704-2108-47ed-8be0-846826d293a1
+Message-ID: <85891e26-655e-4bcc-ad4d-fc71fb65b519@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi [Your Name],
+
+Thanks for reaching out. Please find below the information your engineering team will need for the upcoming biometric-scanner deployment at Heathrow T-5.
+
+1. Technical specifications & design drawings
+• Model: BioScan X200 facial-recognition kiosk
+• Dimensions: 440 mm W × 260 mm D × 1380 mm H
+• Operating temp: ‑10 °C – 50 °C | IP-54
+• Embedded OS: Hardened Linux 5.15 LTS
+• Encryption: AES-256 on-device; TLS 1.3 for data-in-transit
+• Drawings (PDF & DWG) – link below.
+  → Notion: https://www.notion.so/Biometric-Scanner-Technical-Specifications-20f0dc8fa0db811e945cfd776c847bed
+  → Notion: "Heathrow T5 – BioScan Layout v3" (floor-by-floor drawings)
+
+2. Network & power requirements (per kiosk)
+• Network: 1× GbE RJ-45 (PoE+ 802.3at, 25.5 W max)
+  – VLAN 310 – Security Devices
+  – Static IP block reserved: 10.20.35.80/28
+  – Outbound ports: 443 (TLS) to 10.50.12.0/24 (AeroSecure) & *.bioscan.cloud
+• Power (if PoE not used): 110–240 VAC, 50 Hz, 0.8 A (IEC C14 inlet)
+• UPS: minimum 5 min ride-through required by HAL standard.
+
+Location-specific cable pulls are noted in the layout drawings; let me know if you need the CAD layers broken out.
+
+3. System access & onboarding
+• AeroSecure portal: https://portal.aerosecure.io (Prod-UK)
+• I will generate individual service-engineer accounts (role: “Installer – limited”) and share temporary passwords via our secure vault (LastPass) on Friday. Please send the first/last names and work emails for anyone who will need access.
+• Default device password (“Secure*987”) is only for initial imaging; it must be rotated during commissioning. A checklist is included in the Installation guide (Section 3.2).
+
+4. Project timeline / milestones
+• 08 Jul – Site survey & final cable-tray sign-off
+• 19 Jul – Hardware arrives Heathrow T-5 storage
+• 01–18 Aug – Physical install (night shifts 22:00-05:00)
+• 19–24 Aug – Integrated testing with HAL IT & Border Force
+• 26 Aug – Contingency / punch-list
+• 29 Aug – Go-live & hand-over
+A detailed Gantt is in Notion under “Biometric Deployment Schedule v2”.
+
+5. Documentation repository
+All current docs live in the Notion space > Heathrow > Security Upgrade > Biometric X200. Start with:
+• Tech Specs (link above)
+• Installation Guide (PDF inside Tech Specs page)
+• Deployment Schedule v2 (Gantt)
+• Risk Register & Method Statement
+
+6. Calendar / site access
+The night-shift installation window (01–18 Aug, 22:00-05:00) is on the shared project calendar – you should already have a Google invite titled “T5 BioScan – Install Window”. If anyone on your team is missing it, let me know and I’ll re-invite.
+HAL Security badges: submit engineer details (name, DOB, nationality) by 12 Jul so we can request temporary airside passes.
+
+Please review and let me know if anything is unclear or if your team needs additional data. Looking forward to working together.
+
+Best regards,
+Jane Smith
+Airport Design Engineer | Heathrow International
++44 20 7946 1234
+jane.smith@heathrow.com

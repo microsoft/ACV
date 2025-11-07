@@ -1,0 +1,46 @@
+To: yourname@tritondefense.com
+Subject: Re: Request for Cross-Departmental Project Information
+Date: 4ae70eb7-cca2-4909-964e-99a68bc8de4b
+Message-ID: <0c8f8ae7-cf1d-4e63-922e-de9a1908a401@example.com>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi [Your Name],
+
+Below are the key IT details Alex asked for so Marketing can stay aligned on the cross-departmental project.  Let me know if anything else would be helpful.
+
+1. Platform overview
+• Core environment: SecureEdge micro-service architecture (container-based) running in our private cloud.
+• Primary data services: PostgreSQL for structured reporting data, S3-compatible object store for creative assets.
+
+2. Data feeds available to Marketing
+• Daily summary export (JSON) – campaign-level performance metrics.
+• Real-time status API – REST, base URL “/v1/status”, average latency <200 ms.
+• Weekly asset manifest (CSV) – lists new collateral pushed from Product.
+
+3. Access & authentication
+• All endpoints require OAuth 2.0 client-credential flow issued by IT.  Alex’s service account is already provisioned; keys are in the shared Secrets Vault.
+• Inbound requests must originate from Triton-managed IP ranges; drop me the IP(s) to whitelist if the team is testing from a new environment.
+
+4. File & naming conventions
+• Export files: TRTN-<feed-name>-<YYYYMMDD>.json (or .csv)
+• Compression: gzip 
+• Encryption at rest: AES-256; in transit: TLS 1.3
+
+5. Update / maintenance rhythm
+• Non-prod refresh happens once a week in the middle of the local workweek.
+• Production maintenance windows are scheduled during off-peak evening hours with prior notice via the #it-announcements channel.
+
+6. Security & compliance points
+• All shared data is classified “Internal Use” – ok for Marketing distribution lists but please keep it inside corporate systems.
+• No PII or export-controlled content is included in the feeds.
+
+Next steps
+• If the team needs sample payloads or the latest API spec, just let me know and I’ll attach them.
+• Happy to hop on a brief call to walk through the endpoints and dashboard permissions.
+
+Hope this helps—feel free to pass it along to Alex and the rest of the Marketing crew.
+
+Best,
+Jane
+IT Infrastructure & Security
+Triton Defense Solutions
