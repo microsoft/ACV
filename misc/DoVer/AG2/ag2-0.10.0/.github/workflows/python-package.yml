@@ -1,0 +1,67 @@
+# This workflows will build and upload a Python Package using Twine when a release is published
+# Conda-forge bot will pick up new PyPI version and automatically create new version
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+name: python-package
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: null
+permissions: {}
+  # actions: read
+  # checks: read
+  # contents: read
+  # deployments: read
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        os: ['ubuntu-latest']
+        python-version: ["3.10"]
+    runs-on: ${{ matrix.os }}
+    environment: package
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install from source
+        # This is required for the pre-commit tests
+        shell: pwsh
+        run: uv pip install --system -e . wheel "setuptools==58.1.0"
+      # - name: Conda list
+      #   shell: pwsh
+      #   run: conda list
+      - name: Build ag2
+        shell: pwsh
+        run: |
+          uv pip install --system twine
+          uv build
+      # - name: Publish ag2 to PyPI
+      #   env:
+      #     TWINE_USERNAME: ${{ secrets.PYAUTOGEN_PYPI_USERNAME }}
+      #     TWINE_PASSWORD: ${{ secrets.PYAUTOGEN_PYPI_PASSWORD }}
+      #   shell: pwsh
+      #   run: twine upload dist/*ag2*
+      - name: Build autogen
+        shell: pwsh
+        run: |
+          python setup_autogen.py sdist bdist_wheel
+      - name: Publish ag2 to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.AUTOGEN_PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.AUTOGEN_PYPI_PASSWORD }}
+        shell: pwsh
+        run: twine upload dist/ag2*
+      - name: Publish autogen to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.AUTOGEN_PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.AUTOGEN_PYPI_PASSWORD }}
+        shell: pwsh
+        run: twine upload dist/autogen*

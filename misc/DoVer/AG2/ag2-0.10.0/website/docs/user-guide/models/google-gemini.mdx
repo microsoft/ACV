@@ -1,0 +1,213 @@
+---
+title: Google Gemini
+sidebarTitle: Google Gemini
+---
+
+## Installation
+
+Install AG2 with Gemini features:
+
+```bash
+pip install ag2[gemini]
+```
+
+## Dependencies of This Notebook
+
+In this notebook, we will explore how to use Gemini in AG2 alongside other tools. Install the necessary dependencies with the following command:
+
+```bash
+pip install ag2[gemini,retrievechat,lmm]
+```
+<Tip>
+If you have been using `autogen` or `ag2`, all you need to do is upgrade it using:
+```bash
+pip install -U autogen[gemini,retrievechat,lmm]
+```
+or
+```bash
+pip install -U ag2[gemini,retrievechat,lmm]
+```
+as `autogen` and `ag2` are aliases for the same PyPI package.
+</Tip>
+
+## Features
+
+There's no need to handle OpenAI or Google's GenAI packages separately; AG2 manages all of these for you. You can easily create different agents with various backend LLMs using the assistant agent. All models and agents are readily accessible at your fingertips.
+
+Support features:
+- Function/tool calling
+- Structured Outputs ([Notebook example](/docs/use-cases/notebooks/notebooks/agentchat_structured_outputs))
+- Token usage and cost correctly as per Google's API costs (as of December 2024)
+
+
+## Main Distinctions
+
+- Gemini accepts [system instructions](https://ai.google.dev/gemini-api/docs/text-generation?lang=python#system-instructions) to guide model behavior.  If provided, a system message is passed to Gemini's `system_instruction` field.
+- If no API key is specified for Gemini, then authentication will happen using the default google auth mechanism for Google Cloud. Service accounts are also supported, where the JSON key file has to be provided.
+
+Sample OAI_CONFIG_LIST
+
+```python
+[
+    {
+        "model": "gemini-2.0-flash-lite",
+        "api_key": "your Google's GenAI Key goes here",
+        "api_type": "google"
+    },
+    {
+        "model": "gemini-2.0-flash",
+        "api_type": "google"
+    },
+    {
+        "model": "gemini-1.5-pro",
+        "project_id": "your-awesome-google-cloud-project-id",
+        "location": "us-west1",
+        "google_application_credentials": "your-google-service-account-key.json",
+        "api_type": "google"
+    }
+]
+```
+
+<Tip>
+You can put your Google Gemini API key in an environment variable named `GOOGLE_GEMINI_API_KEY` instead of using the `api_key` in your LLM configuration.
+
+For guidance on using environment variables, see our [LLMs documentation](/docs/user-guide/basic-concepts/llm-configuration#environment-variables).
+</Tip>
+
+## Gemini coding example
+
+```python
+import autogen
+from autogen import AssistantAgent, UserProxyAgent, LLMConfig
+from autogen.code_utils import content_str
+
+seed = 42  # for caching, use None for no caching
+llm_config_gemini = LLMConfig.from_json(
+    path="OAI_CONFIG_LIST",
+    seed=seed,
+).where(model="gemini-2.0-flash-lite")
+
+assistant = AssistantAgent(
+    name="assistant",
+    system_message=(
+    "You are a helpful coding assistant. "
+    "After your code has been executed and you have a code execution result, say 'ALL DONE'. "
+    "Do not say 'ALL DONE' in the same response as code."
+    ),
+    max_consecutive_auto_reply=3,
+    llm_config=llm_config_gemini,
+)
+
+user_proxy = UserProxyAgent(
+    "user_proxy",
+    code_execution_config={"work_dir": "coding", "use_docker": False},
+    human_input_mode="NEVER",
+    is_termination_msg=lambda x: content_str(x.get("content")).find("ALL DONE") >= 0,
+)
+
+result = user_proxy.initiate_chat(
+  recipient=assistant,
+  message="Sort the array with Bubble Sort: [4, 1, 5, 2, 3]"
+)
+```
+
+```console
+user_proxy (to assistant):
+
+Sort the array with Bubble Sort: [4, 1, 5, 2, 3]
+
+--------------------------------------------------------------------------------
+/app/ag2/autogen/oai/gemini.py:880: UserWarning: Cost calculation is not implemented for model gemini-2.0-flash-lite. Cost will be calculated zero.
+  warnings.warn(
+assistant (to user_proxy):
+
+'''python
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+
+arr = [4, 1, 5, 2, 3]
+bubble_sort(arr)
+print(arr)
+'''
+
+
+--------------------------------------------------------------------------------
+
+>>>>>>>> EXECUTING CODE BLOCK 0 (inferred language is python)...
+user_proxy (to assistant):
+
+exitcode: 0 (execution succeeded)
+Code output:
+[1, 2, 3, 4, 5]
+
+--------------------------------------------------------------------------------
+assistant (to user_proxy):
+
+ALL DONE
+
+--------------------------------------------------------------------------------
+```
+
+## Gemini vision example
+
+Gemini's models have vision capabilitiesso we can create multimodal agents.
+
+Here, we ask a question about
+![Coding Example](./assets/chat-example.png)
+
+```python
+import autogen
+from autogen import UserProxyAgent, LLMConfig
+from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent
+
+seed = None # for caching
+llm_config_gemini_vision = LLMConfig.from_json(
+    path="OAI_CONFIG_LIST",
+    seed=seed,
+).where(model="gemini-2.0-flash")
+
+image_agent = MultimodalConversableAgent(
+    "Gemini Vision",
+    max_consecutive_auto_reply=1,
+    llm_config=llm_config_gemini_vision,
+)
+
+user_proxy = UserProxyAgent("user_proxy", human_input_mode="NEVER", max_consecutive_auto_reply=0)
+
+user_proxy.initiate_chat(
+    image_agent,
+    message="""Describe what is in this image?
+<img https://github.com/ag2ai/ag2/blob/main/website/docs/user-guide/models/assets/chat-example.png>.""",
+)
+
+```
+
+```console
+user_proxy (to Gemini Vision):
+
+Describe what is in this image?
+<img https://github.com/ag2ai/ag2/blob/main/website/docs/user-guide/models/assets/chat-example.png>.
+
+--------------------------------------------------------------------------------
+
+>>>>>>>> USING AUTO REPLY...
+Gemini Vision (to user_proxy):
+
+The image appears to be a screenshot of a chat interface, likely from a customer service or support application. Here's a breakdown of what I can see:
+
+*   **Chat Bubbles:** The primary visual element is a series of chat bubbles representing a conversation between two parties, presumably a user and a support agent or AI chatbot.
+
+*   **User and Agent Avatars/Names:** There are visual cues to distinguish between the user's messages and the agent's messages. This might be through different colored chat bubbles, different alignment (left vs. right), or the presence of avatars or names associated with each message.
+
+*   **Input Field:** There's a text input field at the bottom where the user can type their messages. It likely includes a send button or an enter-to-send functionality.
+
+*   **Interface Elements:** It appears to be a part of a customer support/model interaction, and include buttons like thumbs up and down, and the option to report the bot.
+
+In summary, the image depicts a typical chat interface used for customer support or interaction with AI models, focusing on clear communication and ease of use.
+
+--------------------------------------------------------------------------------
+```

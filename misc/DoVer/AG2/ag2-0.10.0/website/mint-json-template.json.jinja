@@ -1,0 +1,379 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "AG2",
+  "logo": {
+    "dark": "/logo/ag2-white.svg",
+    "light": "/logo/ag2.svg"
+  },
+  "metadata": {
+    "og:image": "https://media.githubusercontent.com/media/ag2ai/ag2/refs/heads/main/website/static/img/cover.png"
+  },
+  "favicon": "/logo/favicon.svg",
+  "analytics": {
+    "ga4": {
+        "measurementId": "G-2GN2KN2CE4"
+    }
+  },
+  "redirects": [
+    {
+      "source": "/reference/:slug*",
+      "destination": "/docs/api-reference/:slug*"
+    },
+    {
+      "source": "/blog/:slug*",
+      "destination": "/docs/blog/:slug*"
+    },
+    {
+      "source": "/notebooks/:slug*",
+      "destination": "/docs/use-cases/notebooks/notebooks/:slug*"
+    }
+  ],
+  "search": {
+    "prompt": "Search or ask..."
+  },
+  "colors": {
+    "primary": "#4b9cd6",
+    "light": "#63a9db",
+    "dark": "#338fd1",
+    "anchors": {
+      "from": "#338fd1",
+      "to": "#63a9db"
+    }
+  },
+  "topbarCtaButton": {
+    "type": "github",
+    "url": "https://github.com/ag2ai/ag2"
+  },
+  "font": {
+    "headings": {
+      "family": "Jersey 10"
+    },
+    "body": {
+      "family": "Inter"
+    }
+  },
+  "tabs": [
+    {
+      "name": "Home",
+      "url": "docs/home"
+    },
+    {
+      "name": "User Guide",
+      "url": "docs/user-guide"
+    },
+    {
+      "name": "API References",
+      "url": "docs/api-reference"
+    },
+    {
+      "name": "Use Cases",
+      "url": "docs/use-cases"
+    },
+    {
+      "name": "User Stories",
+      "url": "docs/user-stories"
+    },
+    {
+      "name": "Contribute",
+      "url": "docs/contributor-guide"
+    },
+    {
+      "name": "FAQs",
+      "url": "docs/faq"
+    },
+    {
+      "name": "Ecosystem",
+      "url": "docs/ecosystem"
+    },
+    {
+      "name": "Blog",
+      "url": "docs/blog"
+    }
+  ],
+  "anchors": [],
+  "navigation": [
+    {
+      "group": "Quick Start",
+      "pages": [
+        "docs/quick-start"
+      ]
+    },
+    {
+      "group": "User Guide",
+      "pages": [
+        "docs/user-guide/basic-concepts/installing-ag2",
+        {
+          "group": "Basic Concepts",
+          "pages": [
+            "docs/user-guide/basic-concepts/llm-configuration",
+            "docs/user-guide/basic-concepts/conversable-agent",
+            "docs/user-guide/basic-concepts/human-in-the-loop",
+            "docs/user-guide/basic-concepts/introducing-group-chat",
+            "docs/user-guide/basic-concepts/introducing-tools",
+            "docs/user-guide/basic-concepts/structured-outputs"
+          ]
+        },
+        {
+          "group": "Advanced Concepts",
+          "pages": [
+            "docs/user-guide/advanced-concepts/llm-configuration-deep-dive",
+            {
+              "group": "Agent Orchestration Deep Dive",
+              "pages":
+              [
+                "docs/user-guide/advanced-concepts/orchestration/orchestrations",
+                "docs/user-guide/advanced-concepts/orchestration/two-agent-chat",
+                "docs/user-guide/advanced-concepts/orchestration/sequential-chat",
+                "docs/user-guide/advanced-concepts/orchestration/nested-chat",
+                {
+                  "group": "Group Chats",
+                  "pages":
+                  [
+                    "docs/user-guide/advanced-concepts/orchestration/group-chat/introduction",
+                    "docs/user-guide/advanced-concepts/orchestration/group-chat/agent-tools-functions",
+                    "docs/user-guide/advanced-concepts/orchestration/group-chat/context-variables",
+                    "docs/user-guide/advanced-concepts/orchestration/group-chat/handoffs",
+                    "docs/user-guide/advanced-concepts/orchestration/group-chat/patterns",
+                    "docs/user-guide/advanced-concepts/orchestration/group-chat/guardrails",
+                    "docs/user-guide/advanced-concepts/orchestration/group-chat/safeguards"
+                  ]
+                },
+                {
+                  "group": "Swarm",
+                  "pages":
+                  [
+                    "docs/user-guide/advanced-concepts/orchestration/swarm/deprecation"
+                  ]
+                },
+                "docs/user-guide/advanced-concepts/orchestration/ending-a-chat",
+                {
+                  "group": "Pattern Cookbook",
+                  "pages":
+                  [
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/overview",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/context_aware_routing",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/escalation",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/feedback_loop",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/hierarchical",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/organic",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/pipeline",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/redundant",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/star",
+                    "docs/user-guide/advanced-concepts/pattern-cookbook/triage_with_tasks"
+
+                  ]
+                }
+              ]
+            },
+            {
+              "group": "Tools",
+              "pages":
+              [
+                "docs/user-guide/advanced-concepts/tools/index",
+                "docs/user-guide/advanced-concepts/tools/basics",
+                "docs/user-guide/advanced-concepts/tools/controlling-use",
+                "docs/user-guide/advanced-concepts/tools/tools-with-secrets",
+                {
+                  "group": "Model Context Protocol",
+                  "pages":
+                  [
+                    "docs/user-guide/advanced-concepts/tools/mcp/client"
+                  ]
+                },
+                {
+                  "group": "Interoperability",
+                  "pages":
+                  [
+                    "docs/user-guide/advanced-concepts/tools/interop/langchain",
+                    "docs/user-guide/advanced-concepts/tools/interop/crewai",
+                    "docs/user-guide/advanced-concepts/tools/interop/pydanticai"
+                  ]
+                }
+              ]
+            },
+            {
+              "group": "RealtimeAgent",
+              "pages":
+              [
+                "docs/user-guide/advanced-concepts/realtime-agent/index",
+                "docs/user-guide/advanced-concepts/realtime-agent/websocket",
+                "docs/user-guide/advanced-concepts/realtime-agent/webrtc",
+                "docs/user-guide/advanced-concepts/realtime-agent/twilio"
+              ]
+            },
+            "docs/user-guide/advanced-concepts/rag",
+            "docs/user-guide/advanced-concepts/code-execution"
+          ]
+        },
+        {
+          "group": "Model Providers",
+          "pages": [
+            "docs/user-guide/models/amazon-bedrock",
+            "docs/user-guide/models/anthropic",
+            "docs/user-guide/models/cerebras",
+            "docs/user-guide/models/cohere",
+            "docs/user-guide/models/deepseek-v3",
+            "docs/user-guide/models/google-gemini",
+            "docs/user-guide/models/google-vertexai",
+            "docs/user-guide/models/groq",
+            {
+              "group": "LiteLLM Proxy Server",
+              "pages":
+              [
+                "docs/user-guide/models/litellm-proxy-server/installation",
+                "docs/user-guide/models/litellm-proxy-server/openai",
+                "docs/user-guide/models/litellm-proxy-server/azure",
+                "docs/user-guide/models/litellm-proxy-server/watsonx"
+              ]
+            },
+            "docs/user-guide/models/lm-studio",
+            "docs/user-guide/models/mistralai",
+            "docs/user-guide/models/ollama",
+            "docs/user-guide/models/openai",
+            "docs/user-guide/models/openai_responses",
+            "docs/user-guide/models/grok-and-oai-compatible-models",
+            "docs/user-guide/models/togetherai",
+            "docs/user-guide/models/vLLM"
+          ]
+        },
+        {
+          "group": "Reference Agents",
+          "pages": [
+            "docs/user-guide/reference-agents/index",
+            "docs/user-guide/reference-agents/captainagent",
+            {
+              "group": "Communication Platforms",
+              "pages":
+              [
+                "docs/user-guide/reference-agents/communication-platforms/overview",
+                "docs/user-guide/reference-agents/communication-platforms/discordagent",
+                "docs/user-guide/reference-agents/communication-platforms/slackagent",
+                "docs/user-guide/reference-agents/communication-platforms/telegramagent"
+              ]
+            },
+            "docs/user-guide/reference-agents/docagent",
+            "docs/user-guide/reference-agents/docagent-performance",
+            "docs/user-guide/reference-agents/reasoningagent",
+            "docs/user-guide/reference-agents/deepresearchagent",
+            "docs/user-guide/reference-agents/websurferagent",
+            "docs/user-guide/reference-agents/wikipediaagent"
+          ]
+        },
+        {
+          "group": "Reference Tools",
+          "pages":
+          [
+            "docs/user-guide/reference-tools/index",
+            {
+              "group": "Google APIs",
+              "pages":
+              [
+                "docs/user-guide/reference-tools/google-api/youtube-search",
+                "docs/user-guide/reference-tools/google-api/google-search",
+                "docs/user-guide/reference-tools/google-api/google-drive"
+              ]
+            },
+            "docs/user-guide/reference-tools/perplexity-search",
+            "docs/user-guide/reference-tools/wikipedia-search",
+            "docs/user-guide/reference-tools/browser-use",
+            "docs/user-guide/reference-tools/code-execution",
+            {
+              "group": "Communication Platforms",
+              "pages":
+              [
+                "docs/user-guide/reference-tools/communication-platforms/discord",
+                "docs/user-guide/reference-tools/communication-platforms/slack",
+                "docs/user-guide/reference-tools/communication-platforms/telegram"
+              ]
+            },
+            "docs/user-guide/reference-tools/crawl4ai",
+            "docs/user-guide/reference-tools/deep-research",
+            "docs/user-guide/reference-tools/firecrawl",
+            "docs/user-guide/reference-tools/searxng-search"
+          ]
+        },
+        {
+          "group": "A2A",
+          "pages": [
+            "docs/user-guide/a2a/index",
+            "docs/user-guide/a2a/server",
+            "docs/user-guide/a2a/client"
+          ]
+        },
+        "docs/faq/FAQ"
+      ]
+    },
+    {
+      "group": "Contributor Guide",
+      "pages": [
+        "docs/contributor-guide/contributing",
+        "docs/contributor-guide/setup-development-environment",
+        "docs/contributor-guide/documentation",
+        "docs/contributor-guide/file-bug-report",
+        "docs/contributor-guide/maintainer",
+        {
+          "group": "How AG2 Works",
+          "pages": [
+            "docs/contributor-guide/how-ag2-works/overview",
+            "docs/contributor-guide/how-ag2-works/initiate-chat",
+            "docs/contributor-guide/how-ag2-works/generate-reply",
+            "docs/contributor-guide/how-ag2-works/hooks"
+          ]
+        },
+        {
+          "group": "Building Agents & Tools",
+          "pages": [
+            "docs/contributor-guide/building/creating-a-tool",
+            "docs/contributor-guide/building/creating-an-agent"
+          ]
+        },
+        "docs/contributor-guide/pre-commit",
+        "docs/contributor-guide/tests",
+        "docs/contributor-guide/Research"
+      ]
+    },
+    {
+      "group": "Ecosystem",
+      "pages": [
+        "docs/ecosystem/agentops",
+        "docs/ecosystem/azure_cosmos_db",
+        "docs/ecosystem/composio",
+        "docs/ecosystem/databricks",
+        "docs/ecosystem/llamaindex",
+        "docs/ecosystem/mem0",
+        "docs/ecosystem/memgpt",
+        "docs/ecosystem/microsoft-fabric",
+        "docs/ecosystem/ollama",
+        "docs/ecosystem/pgvector",
+        "docs/ecosystem/portkey",
+        "docs/ecosystem/promptflow",
+        "docs/ecosystem/waldiez"
+      ]
+    },
+     {
+      "group": "Use Cases",
+      "pages": [
+        {
+          "group": "Use cases",
+          "pages": [
+            "docs/use-cases/use-cases/customer-service",
+            "docs/use-cases/use-cases/game-design",
+            "docs/use-cases/use-cases/travel-planning"
+          ]
+        },
+        {
+          "group": "Notebooks",
+          "pages": ["docs/use-cases/notebooks/Notebooks"]
+        },
+        "docs/use-cases/community-gallery/community-gallery"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "x": "https://x.com/ag2oss",
+    "github": "https://github.com/ag2ai/ag2",
+    "linkedin": "https://www.linkedin.com/company/ag2ai",
+    "discord": "https://discord.gg/pAbnFJrkgZ",
+    "youtube": "https://www.youtube.com/@ag2ai"
+  }
+}
